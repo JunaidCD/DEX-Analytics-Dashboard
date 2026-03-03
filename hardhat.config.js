@@ -22,8 +22,8 @@ module.exports = {
     },
     // Paseo Testnet
     paseo: {
-      url: "https://rpc.paseo.network",
-      chainId: 4006,
+      url: "https://eth-rpc-testnet.polkadot.io",
+      chainId: 420420417,
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
     }
   }
