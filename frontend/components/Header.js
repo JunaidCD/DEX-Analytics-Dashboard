@@ -1,15 +1,12 @@
 'use client';
 
-import { useAccount, useConnect, useDisconnect, useBalance } from 'wagmi';
-import { injected } from 'wagmi/connectors';
+import { useAccount, useConnect, useDisconnect, useBalance, useConnectors } from 'wagmi';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
 export default function Header() {
   const { address, isConnected, chainId } = useAccount();
-  const { connect } = useConnect({
-    connector: injected(),
-  });
+  const { connectors, connect } = useConnect();
   const { disconnect } = useDisconnect();
   const { data: balance } = useBalance({
     address,
@@ -36,6 +33,27 @@ export default function Header() {
         return 'Pasoero';
       default:
         return `Chain ${id}`;
+    }
+  };
+
+  const handleConnect = async () => {
+    try {
+      // Find the injected connector (MetaMask)
+      const connector = connectors.find(c => c.type === 'injected');
+      
+      if (connector) {
+        await connect({ connector });
+      } else {
+        // Fallback: try the first available connector
+        if (connectors.length > 0) {
+          await connect({ connector: connectors[0] });
+        } else {
+          alert('No wallet connector found. Please install MetaMask.');
+        }
+      }
+    } catch (error) {
+      console.error('Connection error:', error);
+      alert('Failed to connect wallet: ' + error.message);
     }
   };
 
@@ -77,7 +95,7 @@ export default function Header() {
               </button>
             </div>
           ) : (
-            <button onClick={() => connect()} className="connect-btn">
+            <button onClick={handleConnect} className="connect-btn">
               Connect Wallet
             </button>
           )}
