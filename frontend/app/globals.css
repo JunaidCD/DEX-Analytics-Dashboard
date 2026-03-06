@@ -452,11 +452,12 @@ body::before {
   background: var(--background);
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 1.25rem 1.5rem;
+  padding: 1.5rem;
   display: flex;
   align-items: center;
   gap: 1rem;
   transition: all 0.2s ease;
+  min-height: 80px;
 }
 
 .token-input:focus-within {
@@ -488,10 +489,12 @@ body::before {
   background: none;
   border: none;
   color: var(--text-primary);
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 600;
   outline: none;
   text-align: right;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .token-amount::placeholder {
@@ -501,7 +504,7 @@ body::before {
 .swap-arrow {
   display: flex;
   justify-content: center;
-  margin: -0.25rem 0;
+  margin: -0.5rem 0;
   position: relative;
   z-index: 1;
 }
