@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAccount } from 'wagmi';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
@@ -23,6 +23,37 @@ const mockPools = [
 export default function DashboardPage() {
   const { isConnected, address } = useAccount();
   const [chartTimeframe, setChartTimeframe] = useState('7D');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <div>
+        <div className="dashboard-grid">
+          <div className="stat-card">
+            <div className="stat-label">Total Value Locked</div>
+            <div className="stat-value">$0</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-label">Your Portfolio Value</div>
+            <div className="stat-value">$0</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-label">24h Trading Volume</div>
+            <div className="stat-value">$0</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-label">Your Fees Earned</div>
+            <div className="stat-value">$0</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
