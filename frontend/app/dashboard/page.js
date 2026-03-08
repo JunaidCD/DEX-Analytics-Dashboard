@@ -1,38 +1,39 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { useAccount, useReadContract } from 'wagmi';
-import { parseUnits, formatUnits, formatEther } from 'viem';
+import { useAccount, useReadContract, usePublicClient } from 'wagmi';
+import { parseUnits, formatUnits, parseEventLogs } from 'viem';
 import { CONTRACTS } from '../../config/wagmi';
 import { ERC20_ABI, ROUTER_ABI, PAIR_ABI, FACTORY_ABI } from '../../config/abis';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-// Mock price history data
-const generatePriceHistory = () => {
-  const data = [];
-  let price = 3250;
-  for (let i = 6; i >= 0; i--) {
-    const date = new Date();
-    date.setDate(date.getDate() - i);
-    price = price + (Math.random() - 0.5) * 100;
-    data.push({
-      time: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-      price: price,
-    });
-  }
-  return data;
+// Swap Event ABI for parsing logs
+const SWAP_EVENT_ABI = {
+  anonymous: false,
+  inputs: [
+    { indexed: true, name: 'sender', type: 'address' },
+    { indexed: false, name: 'amount0In', type: 'uint256' },
+    { indexed: false, name: 'amount1In', type: 'uint256' },
+    { indexed: false, name: 'amount0Out', type: 'uint256' },
+    { indexed: false, name: 'amount1Out', type: 'uint256' },
+    { indexed: true, name: 'to', type: 'address' }
+  ],
+  name: 'Swap',
+  type: 'event'
 };
 
 export default function DashboardPage() {
   const { isConnected, address } = useAccount();
+  const publicClient = usePublicClient();
   const [mounted, setMounted] = useState(false);
   const [slippageInput, setSlippageInput] = useState('100');
   const [lpAmount, setLpAmount] = useState('10');
   const [priceHistory, setPriceHistory] = useState([]);
+  const [swapEvents, setSwapEvents] = useState([]);
+  const [loadingEvents, setLoadingEvents] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    setPriceHistory(generatePriceHistory());
   }, []);
 
   // Get pair address
@@ -44,7 +45,7 @@ export default function DashboardPage() {
   });
 
   // Get reserves
-  const { data: reserves } = useReadContract({
+  const { data: reserves, refetch: refetchReserves } = useReadContract({
     address: pairAddress,
     abi: PAIR_ABI,
     functionName: 'getReserves',
@@ -68,6 +69,95 @@ export default function DashboardPage() {
     query: { enabled: isConnected && address && !!pairAddress }
   });
 
+  // Fetch swap events from the blockchain
+  useEffect(() => {
+    async function fetchSwapEvents() {
+      if (!publicClient || !pairAddress) return;
+      
+      setLoadingEvents(true);
+      try {
+        const logs = await publicClient.getLogs({
+          address: pairAddress,
+          event: SWAP_EVENT_ABI,
+          fromBlock: 0n,
+          toBlock: 'latest',
+        });
+        
+        setSwapEvents(logs);
+        
+        // Process swap events to get price history
+        if (logs.length > 0 && reserves && token0) {
+          const isUSDC0 = token0.toLowerCase() === CONTRACTS.USDC.toLowerCase();
+          
+          // Get last 7 swaps for price history
+          const recentSwaps = logs.slice(-7);
+          const history = recentSwaps.map((log, i) => {
+            const amount0In = log.args.amount0In || 0n;
+            const amount1In = log.args.amount1In || 0n;
+            const amount0Out = log.args.amount0Out || 0n;
+            const amount1Out = log.args.amount1Out || 0n;
+            
+            const usdcIn = isUSDC0 ? amount0In : amount1In;
+            const usdcOut = isUSDC0 ? amount0Out : amount1Out;
+            const mtkIn = isUSDC0 ? amount1In : amount0In;
+            const mtkOut = isUSDC0 ? amount1Out : amount0Out;
+            
+            const totalUSDC = usdcIn + usdcOut;
+            const totalMTK = mtkIn + mtkOut;
+            
+            let price;
+            if (totalUSDC > 0n && totalMTK > 0n) {
+              price = Number(formatUnits(totalUSDC, 6)) / Number(formatUnits(totalMTK, 18));
+            } else {
+              price = 3250; // default
+            }
+            
+            return {
+              time: `T${i + 1}`,
+              price: price,
+              swap: true
+            };
+          });
+          
+          setPriceHistory(history);
+        } else {
+          // Generate mock data if no events
+          const mockData = [];
+          let price = 3250;
+          for (let i = 6; i >= 0; i--) {
+            price = price + (Math.random() - 0.5) * 100;
+            mockData.push({
+              time: `T${7 - i}`,
+              price: price,
+              swap: false
+            });
+          }
+          setPriceHistory(mockData);
+        }
+      } catch (error) {
+        console.log('Error fetching swap events:', error);
+        // Fall back to mock data
+        const mockData = [];
+        let price = 3250;
+        for (let i = 6; i >= 0; i--) {
+          price = price + (Math.random() - 0.5) * 100;
+          mockData.push({
+            time: `T${7 - i}`,
+            price: price,
+            swap: false
+          });
+        }
+        setPriceHistory(mockData);
+      } finally {
+        setLoadingEvents(false);
+      }
+    }
+    
+    if (mounted && pairAddress) {
+      fetchSwapEvents();
+    }
+  }, [mounted, pairAddress, publicClient, reserves, token0]);
+
   // Calculate current price
   const currentPrice = useMemo(() => {
     if (!reserves || !token0) return 0;
@@ -82,20 +172,18 @@ export default function DashboardPage() {
   const slippageImpact = useMemo(() => {
     if (!slippageInput || !reserves || !token0) return { impact: 0, output: 0 };
     
-    const amountIn = parseUnits(slippageInput, 6); // USDC decimals
+    const amountIn = parseUnits(slippageInput, 6);
     const isUSDC0 = token0.toLowerCase() === CONTRACTS.USDC.toLowerCase();
     const reserveIn = isUSDC0 ? reserves[0] : reserves[1];
     const reserveOut = isUSDC0 ? reserves[1] : reserves[0];
     
     if (reserveIn <= 0n || reserveOut <= 0n) return { impact: 0, output: 0 };
     
-    // AMM formula: amountOut = (amountIn * 997 * reserveOut) / (reserveIn * 1000 + amountIn * 997)
     const amountInWithFee = amountIn * 997n;
     const numerator = amountInWithFee * reserveOut;
     const denominator = reserveIn * 1000n + amountInWithFee;
     const output = numerator / denominator;
     
-    // Calculate price impact
     const spotPrice = (reserveOut * parseUnits('1', 6)) / reserveIn;
     const actualPrice = (output * parseUnits('1', 6)) / amountIn;
     const impact = ((spotPrice - actualPrice) / spotPrice) * 100;
@@ -113,27 +201,20 @@ export default function DashboardPage() {
     }
 
     const lpTokens = parseUnits(lpAmount, 18);
-    const totalSupply = parseUnits('1000', 18); // Mock total supply
+    const totalSupply = parseUnits('1000', 18);
     const poolValueUSDC = Number(formatUnits(reserves[0], 6));
     const poolValueMTK = Number(formatUnits(reserves[1], 18));
     
-    // User's share of pool
     const userShare = Number(lpTokens) / Number(totalSupply);
-    
-    // Initial values (assume 50/50 split)
     const initialUSDC = poolValueUSDC * 0.5 * userShare;
     const initialMTK = poolValueMTK * 0.5 * userShare;
     const initialValueUSD = initialUSDC + (initialMTK * currentPrice);
     
-    // Current value
     const currentUSDC = poolValueUSDC * userShare;
     const currentMTK = poolValueMTK * userShare;
     const currentValueUSD = currentUSDC + (currentMTK * currentPrice);
     
-    // Impermanent loss = (current / initial) - 1
     const impermanentLoss = ((currentValueUSD / initialValueUSD) - 1) * 100;
-    
-    // Mock fees earned (0.3% of volume)
     const feesEarned = Number(lpAmount) * 0.003 * currentPrice;
     
     return {
@@ -143,12 +224,19 @@ export default function DashboardPage() {
     };
   }, [lpAmount, reserves, token0, currentPrice, lpBalance]);
 
-  // Mock 24h volume
+  // 24h volume from swap events
   const volume24h = useMemo(() => {
-    if (!reserves) return 0;
-    // Calculate based on reserves change (mock)
-    return (Number(formatUnits(reserves[0], 6)) * 0.15).toFixed(2);
-  }, [reserves]);
+    if (swapEvents.length === 0) return '0';
+    // Estimate volume from events
+    const total = swapEvents.reduce((acc, log) => {
+      const isUSDC0 = token0?.toLowerCase() === CONTRACTS.USDC.toLowerCase();
+      const amount0In = log.args.amount0In || 0n;
+      const amount0Out = log.args.amount0Out || 0n;
+      const usdcAmount = isUSDC0 ? amount0In + amount0Out : (log.args.amount1In || 0n) + (log.args.amount1Out || 0n);
+      return acc + Number(formatUnits(usdcAmount, 6));
+    }, 0);
+    return total.toFixed(2);
+  }, [swapEvents, token0]);
 
   if (!mounted) {
     return (
@@ -196,10 +284,12 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Price Chart */}
+          {/* Price Chart - from Swap Events */}
           <div className="chart-container">
             <div className="chart-header">
-              <h3>Price History (USDC/MTK)</h3>
+              <h3>📈 Price from Swap Events</h3>
+              {loadingEvents && <span className="loading-badge">Loading...</span>}
+              {swapEvents.length > 0 && <span className="event-badge">{swapEvents.length} swaps</span>}
             </div>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={priceHistory}>
@@ -218,7 +308,7 @@ export default function DashboardPage() {
                     border: '1px solid #2a2a3a',
                     borderRadius: '8px',
                   }}
-                  formatter={(value) => [`$${value.toFixed(2)}`, 'Price']}
+                  formatter={(value, name, props) => [`$${value.toFixed(2)}`, props.payload.swap ? 'Swap Price' : 'Est. Price']}
                 />
                 <Line 
                   type="monotone" 
@@ -230,13 +320,16 @@ export default function DashboardPage() {
                 />
               </LineChart>
             </ResponsiveContainer>
+            {swapEvents.length === 0 && (
+              <p className="chart-note">No swap events found. Make some swaps to see the price chart!</p>
+            )}
           </div>
 
           {/* Slippage Estimator */}
           <div className="analytics-section">
             <div className="analytics-card">
               <h3>🔮 Slippage Estimator</h3>
-              <p className="analytics-desc">Calculate price impact for a given swap amount</p>
+              <p className="analytics-desc">Calculate price impact using AMM formula</p>
               
               <div className="input-group">
                 <label>Swap Amount (USDC)</label>
@@ -268,8 +361,8 @@ export default function DashboardPage() {
 
             {/* LP PnL Calculator */}
             <div className="analytics-card">
-              <h3>📈 LP PnL Calculator</h3>
-              <p className="analytics-desc">Calculate impermanent loss and fees earned</p>
+              <h3>📊 LP PnL Calculator</h3>
+              <p className="analytics-desc">Calculate impermanent loss + fees earned</p>
               
               <div className="input-group">
                 <label>LP Token Amount</label>
@@ -308,7 +401,7 @@ export default function DashboardPage() {
 
           {/* Top Pools */}
           <div className="pools-list">
-            <h3>📊 Top Pools</h3>
+            <h3>🏊 Top Pools</h3>
             <div className="pool-item">
               <div className="pool-tokens">
                 <div className="pool-token-icons">

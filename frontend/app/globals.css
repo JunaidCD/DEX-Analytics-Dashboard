@@ -1033,6 +1033,29 @@ body::before {
   margin-top: 0.75rem;
 }
 
+.loading-badge {
+  background: rgba(99, 102, 241, 0.2);
+  color: var(--primary);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+}
+
+.event-badge {
+  background: rgba(16, 185, 129, 0.2);
+  color: var(--success);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+}
+
+.chart-note {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin-top: 1rem;
+}
+
 /* Animations */
 @keyframes fadeIn {
   from {
