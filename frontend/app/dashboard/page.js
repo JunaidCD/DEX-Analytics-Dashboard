@@ -6,6 +6,7 @@ import { parseUnits, formatUnits, parseEventLogs } from 'viem';
 import { CONTRACTS } from '../../config/wagmi';
 import { ERC20_ABI, ROUTER_ABI, PAIR_ABI, FACTORY_ABI } from '../../config/abis';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import TradeHistory from '../../components/TradeHistory';
 
 // Swap Event ABI for parsing logs
 const SWAP_EVENT_ABI = {
@@ -421,6 +422,9 @@ export default function DashboardPage() {
               </div>
             </div>
           </div>
+
+          {/* Trade History */}
+          <TradeHistory pairAddress={pairAddress} token0={token0} />
         </>
       )}
     </div>
