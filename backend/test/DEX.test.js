@@ -48,7 +48,7 @@ describe("DEX Factory and Pair", function () {
 
     it("should track all pairs", async function () {
       const length = await factory.allPairsLength();
-      expect(length).to.equal(1);
+      expect(length).to.equal(1n);
     });
   });
 
@@ -65,7 +65,7 @@ describe("DEX Factory and Pair", function () {
       await pair.connect(user1).mint(user1.address);
 
       const lpBalance = await pair.balanceOf(user1.address);
-      expect(lpBalance).to.be.gt(0);
+      expect(lpBalance > 0n).to.be.true;
     });
 
     it("should get correct reserves after adding liquidity", async function () {
@@ -80,8 +80,8 @@ describe("DEX Factory and Pair", function () {
 
       const [reserve0, reserve1] = await pair.getReserves();
       // reserves are stored as uint112
-      expect(reserve0).to.be.gt(0);
-      expect(reserve1).to.be.gt(0);
+      expect(reserve0 > 0n).to.be.true;
+      expect(reserve1 > 0n).to.be.true;
     });
   });
 
@@ -103,7 +103,7 @@ describe("DEX Factory and Pair", function () {
 
       // Get expected output using the contract
       const amountOut = await pair.getAmountOut(amountIn, reserve1, reserve0);
-      expect(amountOut).to.be.gt(0);
+      expect(amountOut > 0n).to.be.true;
     });
   });
 });

@@ -63,7 +63,7 @@ describe("DEXRouter - Full Flow", function () {
       // Check LP tokens received
       const pair = await ethers.getContractAt("IERC20", pairAddress);
       const lpBalance = await pair.balanceOf(user1.address);
-      expect(lpBalance).to.be.gt(0);
+      expect(lpBalance > 0n).to.be.true;
     });
   });
 
@@ -119,8 +119,8 @@ describe("DEXRouter - Full Flow", function () {
       const userUSDCAfter = await mockUSDC.balanceOf(user1.address);
       const userTokenAfter = await mockToken.balanceOf(user1.address);
 
-      expect(userUSDCAfter - userUSDCBefore).to.be.gt(0);
-      expect(userTokenAfter - userTokenBefore).to.be.gt(0);
+      expect(userUSDCAfter - userUSDCBefore > 0n).to.be.true;
+      expect(userTokenAfter - userTokenBefore > 0n).to.be.true;
     });
   });
 
@@ -150,13 +150,13 @@ describe("DEXRouter - Full Flow", function () {
       // Check LP tokens
       const pair = await ethers.getContractAt("IERC20", pairAddress);
       const lpBalance = await pair.balanceOf(user1.address);
-      expect(lpBalance).to.be.gt(0);
+      expect(lpBalance > 0n).to.be.true;
 
       // Check reserves
       const dexPair = await ethers.getContractAt("DEXPair", pairAddress);
       const [reserve0, reserve1] = await dexPair.getReserves();
-      expect(reserve0).to.be.gt(0);
-      expect(reserve1).to.be.gt(0);
+      expect(reserve0 > 0n).to.be.true;
+      expect(reserve1 > 0n).to.be.true;
 
       console.log("=== End-to-End Test Results ===");
       console.log("LP Tokens Received:", lpBalance.toString());
