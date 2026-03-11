@@ -12,4 +12,9 @@ contract MockToken is ERC20, Ownable {
     function mint(address to, uint256 amount) external onlyOwner {
         _mint(to, amount);
     }
+
+    // Faucet function - anyone can get free tokens
+    function faucet(address to) external {
+        _mint(to, 1000000000000000000000); // Mint 1000 MTK (18 decimals)
+    }
 }
