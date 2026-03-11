@@ -216,7 +216,10 @@ contract DEXPair is ERC20, ReentrancyGuard {
                     balance0Adjusted = amount0In * 1000 - amount0In * 3;
                     balance1Adjusted = amount1In * 1000 - amount1In * 3;
                 }
-                require(balance0Adjusted * balance1Adjusted >= uint256(_reserve0) * uint256(_reserve1) * 1000000, 'DEX: K');
+                // Wrap K check in unchecked to prevent overflow
+                unchecked {
+                    require(balance0Adjusted * balance1Adjusted >= uint256(_reserve0) * uint256(_reserve1) * 1000000, 'DEX: K');
+                }
             }
             balance0 = IERC20(token0).balanceOf(address(this));
             balance1 = IERC20(token1).balanceOf(address(this));
