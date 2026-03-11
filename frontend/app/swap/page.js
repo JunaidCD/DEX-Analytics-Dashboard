@@ -146,10 +146,10 @@ export default function SwapPage() {
     const amountOut = numerator / denominator;
 
     // Calculate price impact
-    const spotPrice = (reserveOut * parseUnits('1', fromToken.decimals)) / reserveIn;
-    const actualPrice = (amountOut * parseUnits('1', fromToken.decimals)) / amountIn;
-    const impact = ((spotPrice - actualPrice) / spotPrice) * 100;
-    setPriceImpact(Number(impact));
+    const spotPriceNum = Number(formatUnits((reserveOut * parseUnits('1', fromToken.decimals)) / reserveIn, fromToken.decimals));
+    const actualPriceNum = Number(formatUnits((amountOut * parseUnits('1', fromToken.decimals)) / amountIn, fromToken.decimals));
+    const impact = ((spotPriceNum - actualPriceNum) / spotPriceNum) * 100;
+    setPriceImpact(impact);
 
     setToAmount(formatUnits(amountOut, toToken.decimals));
   }, [fromAmount, reserves, token0, fromToken, toToken.decimals]);
