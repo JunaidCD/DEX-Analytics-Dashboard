@@ -71,40 +71,12 @@ async function main() {
   console.log("Reserves - Token0:", reserve0.toString());
   console.log("Reserves - Token1:", reserve1.toString());
 
-  // Try a swap
-  const swapAmount = ethers.parseUnits("10", 6);
-  await mockUSDC.approve(router.target, swapAmount);
-  
-  try {
-    const swapTx = await router.swapExactTokensForTokens(
-      swapAmount,
-      0,
-      [mockUSDC.target, mockToken.target],
-      deployer.address,
-      deadline
-    );
-    await swapTx.wait();
-    console.log("Swap executed successfully!");
-    
-    const userTokenBalance = await mockToken.balanceOf(deployer.address);
-    console.log("Token balance after swap:", userTokenBalance.toString());
-  } catch (error) {
-    console.log("Swap failed:", error.message);
-  }
-
   console.log("\n=== Deployment Summary ===");
   console.log("MockUSDC:", mockUSDC.target);
   console.log("MockToken:", mockToken.target);
   console.log("DEXFactory:", factory.target);
   console.log("DEXRouter:", router.target);
   console.log("Pair (USDC/MTK):", pairAddress);
-  
-  console.log("\n=== Contract Addresses for Hardhat Console ===");
-  console.log(`const mockUSDC = await ethers.getContractAt("MockUSDC", "${mockUSDC.target}")`);
-  console.log(`const mockToken = await ethers.getContractAt("MockToken", "${mockToken.target}")`);
-  console.log(`const factory = await ethers.getContractAt("DEXFactory", "${factory.target}")`);
-  console.log(`const router = await ethers.getContractAt("DEXRouter", "${router.target}")`);
-  console.log(`const pair = await ethers.getContractAt("DEXPair", "${pairAddress}")`);
 }
 
 main()
