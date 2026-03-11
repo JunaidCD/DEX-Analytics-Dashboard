@@ -31,6 +31,8 @@ export default function Header() {
         return 'Sepolia';
       case 10000:
         return 'Pasoero';
+      case 420420417:
+        return 'Polkadot Hub';
       default:
         return `Chain ${id}`;
     }
