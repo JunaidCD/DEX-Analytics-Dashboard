@@ -34,6 +34,7 @@ const TOKENS = [
 export default function SwapPage() {
   const { isConnected, address } = useAccount();
   const chainId = useChainId();
+  const [mounted, setMounted] = useState(false);
   
   const [fromToken, setFromToken] = useState(TOKENS[0]);
   const [toToken, setToToken] = useState(TOKENS[1]);
@@ -47,6 +48,11 @@ export default function SwapPage() {
 
   // Get contract addresses based on chain
   const routerAddress = chainId === 31337 ? CONTRACTS.router : CONTRACTS.router;
+
+  // Fix hydration - only render client-specific content after mount
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   
   // Calculate minimum output with slippage
   const minOutput = useMemo(() => {
@@ -388,14 +394,18 @@ export default function SwapPage() {
         </div>
 
         {/* Balance Display */}
-        {isConnected && (
+        {mounted && isConnected && (
           <div className="balance-display">
             <span>{fromToken.symbol} Balance: {formatBalance(fromBalance, fromToken.decimals)}</span>
           </div>
         )}
 
         {/* Action Button */}
-        {!isConnected ? (
+        {!mounted ? (
+          <button className="swap-submit" disabled>
+            Loading...
+          </button>
+        ) : !isConnected ? (
           <button className="swap-submit" disabled>
             Connect Wallet
           </button>
