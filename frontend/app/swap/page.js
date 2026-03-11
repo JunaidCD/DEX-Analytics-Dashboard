@@ -209,6 +209,7 @@ export default function SwapPage() {
         abi: ROUTER_ABI,
         functionName: 'swapExactTokensForTokens',
         args: [amountIn, minOutput, path, address, deadline],
+        value: 0n,
       });
     } catch (error) {
       showToast('Swap failed: ' + error.message, 'error');
