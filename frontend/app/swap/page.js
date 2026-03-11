@@ -3,23 +3,25 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt, useChainId } from 'wagmi';
 import { parseUnits, formatUnits, formatEther, parseEther } from 'viem';
-import { CONTRACTS } from '../../config/wagmi';
+import { CONTRACTS, CONTRACTS_LOCAL } from '../../config/wagmi';
 import { ERC20_ABI, ROUTER_ABI, PAIR_ABI, FACTORY_ABI } from '../../config/abis';
 
 // Token list - update addresses after deployment
-const TOKENS = [
+const TOKENS = (chainId) => {
+  const contracts = chainId === 31337 ? CONTRACTS_LOCAL : CONTRACTS;
+  return [
   { 
     symbol: 'USDC', 
     name: 'USD Coin', 
     decimals: 6, 
-    address: CONTRACTS.USDC,
+    address: contracts.USDC,
     logo: '💵'
   },
   { 
     symbol: 'MTK', 
     name: 'Mock Token', 
     decimals: 18, 
-    address: CONTRACTS.MTK,
+    address: contracts.MTK,
     logo: '🪙'
   },
   { 
@@ -28,6 +30,8 @@ const TOKENS = [
     decimals: 18, 
     address: '0x0000000000000000000000000000000000000000',
     logo: 'Ξ'
+  }];
+};
   },
 ];
 
@@ -36,8 +40,8 @@ export default function SwapPage() {
   const chainId = useChainId();
   const [mounted, setMounted] = useState(false);
   
-  const [fromToken, setFromToken] = useState(TOKENS[0]);
-  const [toToken, setToToken] = useState(TOKENS[1]);
+  const [fromToken, setFromToken] = useState(TOKENS(chainId)[0]);
+  const [toToken, setToToken] = useState(TOKENS(chainId)[1]);
   const [fromAmount, setFromAmount] = useState('');
   const [toAmount, setToAmount] = useState('');
   const [slippage, setSlippage] = useState(0.5);
@@ -47,7 +51,8 @@ export default function SwapPage() {
   const [priceImpact, setPriceImpact] = useState(0);
 
   // Get contract addresses based on chain
-  const routerAddress = chainId === 31337 ? CONTRACTS.router : CONTRACTS.router;
+  const activeContracts = chainId === 31337 ? CONTRACTS_LOCAL : CONTRACTS;
+  const routerAddress = activeContracts.router;
 
   // Fix hydration - only render client-specific content after mount
   useEffect(() => {

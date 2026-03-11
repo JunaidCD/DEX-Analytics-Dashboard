@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { useAccount, useReadContract, usePublicClient } from 'wagmi';
+import { useAccount, useReadContract, usePublicClient, useChainId } from 'wagmi';
 import { parseUnits, formatUnits, parseEventLogs } from 'viem';
-import { CONTRACTS } from '../../config/wagmi';
+import { CONTRACTS, CONTRACTS_LOCAL } from '../../config/wagmi';
 import { ERC20_ABI, ROUTER_ABI, PAIR_ABI, FACTORY_ABI } from '../../config/abis';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import TradeHistory from '../../components/TradeHistory';
@@ -26,6 +26,7 @@ const SWAP_EVENT_ABI = {
 export default function DashboardPage() {
   const { isConnected, address } = useAccount();
   const publicClient = usePublicClient();
+  const chainId = useChainId();
   const [mounted, setMounted] = useState(false);
   const [slippageInput, setSlippageInput] = useState('100');
   const [lpAmount, setLpAmount] = useState('10');
@@ -33,16 +34,19 @@ export default function DashboardPage() {
   const [swapEvents, setSwapEvents] = useState([]);
   const [loadingEvents, setLoadingEvents] = useState(false);
 
+  // Get contract addresses based on chain
+  const activeContracts = chainId === 31337 ? CONTRACTS_LOCAL : CONTRACTS;
+
   useEffect(() => {
     setMounted(true);
   }, []);
 
   // Get pair address
   const { data: pairAddress } = useReadContract({
-    address: CONTRACTS.factory,
+    address: activeContracts.factory,
     abi: FACTORY_ABI,
     functionName: 'getPair',
-    args: [CONTRACTS.USDC, CONTRACTS.MTK].sort(),
+    args: [activeContracts.USDC, activeContracts.MTK].sort(),
   });
 
   // Get reserves
