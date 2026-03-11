@@ -26,6 +26,12 @@ module.exports = {
       url: "https://eth-rpc-testnet.polkadot.io",
       chainId: 420420417,
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
+    },
+    // Polkadot Hub Testnet (Paseo-based EVM)
+    polkadotHubTestnet: {
+      url: "https://eth-rpc-testnet.polkadot.io/",
+      chainId: 420420417,
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
     }
   }
 };
