@@ -185,8 +185,8 @@ export default function DashboardPage() {
     const denominator = reserveIn * 1000n + amountInWithFee;
     const output = numerator / denominator;
     
-    const spotPrice = (reserveOut * parseUnits('1', 6)) / reserveIn;
-    const actualPrice = (output * parseUnits('1', 6)) / amountIn;
+    const spotPrice = Number(formatUnits((reserveOut * parseUnits('1', 6)) / reserveIn, 6));
+    const actualPrice = Number(formatUnits((output * parseUnits('1', 6)) / amountIn, 6));
     const impact = ((spotPrice - actualPrice) / spotPrice) * 100;
     
     return {
