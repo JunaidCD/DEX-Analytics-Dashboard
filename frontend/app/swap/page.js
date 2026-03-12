@@ -3,39 +3,44 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt, useChainId } from 'wagmi';
 import { parseUnits, formatUnits, formatEther, parseEther } from 'viem';
-import { CONTRACTS } from '../../config/wagmi';
+import { getChainContracts } from '../../config/wagmi';
 import { ERC20_ABI, ROUTER_ABI, PAIR_ABI, FACTORY_ABI } from '../../config/abis';
-
-// Token list - update addresses after deployment
-const TOKENS = [
-  { 
-    symbol: 'USDC', 
-    name: 'USD Coin', 
-    decimals: 6, 
-    address: CONTRACTS.USDC,
-    logo: '💵'
-  },
-  { 
-    symbol: 'MTK', 
-    name: 'Mock Token', 
-    decimals: 18, 
-    address: CONTRACTS.MTK,
-    logo: '🪙'
-  },
-  { 
-    symbol: 'ETH', 
-    name: 'Ethereum', 
-    decimals: 18, 
-    address: '0x0000000000000000000000000000000000000000',
-    logo: 'Ξ'
-  },
-];
 
 export default function SwapPage() {
   const { isConnected, address } = useAccount();
   const chainId = useChainId();
   const [mounted, setMounted] = useState(false);
   
+  // Get contracts for current chain
+  const CONTRACTS = useMemo(() => {
+    return getChainContracts(chainId);
+  }, [chainId]);
+
+  // Token list - update addresses after deployment
+  const TOKENS = useMemo(() => [
+    { 
+      symbol: 'USDC', 
+      name: 'USD Coin', 
+      decimals: 6, 
+      address: CONTRACTS.USDC,
+      logo: '💵'
+    },
+    { 
+      symbol: 'MTK', 
+      name: 'Mock Token', 
+      decimals: 18, 
+      address: CONTRACTS.MTK,
+      logo: '🪙'
+    },
+    { 
+      symbol: 'ETH', 
+      name: 'Ethereum', 
+      decimals: 18, 
+      address: '0x0000000000000000000000000000000000000000',
+      logo: 'Ξ'
+    },
+  ], [CONTRACTS]);
+
   const [fromToken, setFromToken] = useState(TOKENS[0]);
   const [toToken, setToToken] = useState(TOKENS[1]);
   const [fromAmount, setFromAmount] = useState('');
@@ -53,7 +58,7 @@ export default function SwapPage() {
   useEffect(() => {
     setMounted(true);
   }, []);
-  
+   
   // Calculate minimum output with slippage
   const minOutput = useMemo(() => {
     if (!toAmount) return 0n;
@@ -167,14 +172,14 @@ export default function SwapPage() {
 
   // Approve token
   const { data: approveData, writeContract: writeApprove } = useWriteContract();
-  
+   
   const { isLoading: isApproveLoading, isConfirmed: isApproveConfirmed } = useWaitForTransactionReceipt({
     hash: approveData,
   });
 
   // Swap tokens
   const { data: swapData, writeContract: writeSwap } = useWriteContract();
-  
+   
   const { isLoading: isSwapLoading, isConfirmed: isSwapConfirmed } = useWaitForTransactionReceipt({
     hash: swapData,
   });
@@ -198,6 +203,14 @@ export default function SwapPage() {
   // Handle swap
   const handleSwap = async () => {
     if (!fromAmount || !toAmount) return;
+    if (!pairAddress) {
+      showToast('Trading pair does not exist. Please create liquidity first.', 'error');
+      return;
+    }
+    if (routerAddress === '0x0000000000000000000000000000000000000000') {
+      showToast('Router contract not deployed on this network.', 'error');
+      return;
+    }
     
     try {
       const amountIn = parseUnits(fromAmount, fromToken.decimals);
@@ -210,6 +223,7 @@ export default function SwapPage() {
         functionName: 'swapExactTokensForTokens',
         args: [amountIn, minOutput, path, address, deadline],
         value: 0n,
+        gas: BigInt(500000),
       });
     } catch (error) {
       showToast('Swap failed: ' + error.message, 'error');
@@ -422,9 +436,9 @@ export default function SwapPage() {
           <button 
             className="swap-submit" 
             onClick={handleSwap}
-            disabled={!fromAmount || !toAmount || isSwapLoading || priceImpact > 20}
+            disabled={!fromAmount || !toAmount || isSwapLoading || priceImpact > 20 || !pairAddress}
           >
-            {isSwapLoading ? 'Swapping...' : priceImpact > 20 ? 'Price Impact Too High' : 'Swap'}
+            {isSwapLoading ? 'Swapping...' : priceImpact > 20 ? 'Price Impact Too High' : !pairAddress ? 'Create Pair First' : 'Swap'}
           </button>
         )}
 
