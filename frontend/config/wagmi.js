@@ -40,10 +40,10 @@ const polkadotHubTestnet = {
   },
   rpcUrls: {
     default: {
-      http: ['https://eth-rpc-testnet.polkadot.io/'],
+      http: ['https://eth-rpc-testnet.polkadot.io'],
     },
     public: {
-      http: ['https://eth-rpc-testnet.polkadot.io/'],
+      http: ['https://eth-rpc-testnet.polkadot.io'],
     },
   },
   blockExplorers: {
@@ -54,43 +54,28 @@ const polkadotHubTestnet = {
   },
 };
 
-// Contract addresses on Polkadot Hub Testnet
-// Deployed via deploy-router.js
+// Contract addresses on Polkadot Hub Testnet (chainId: 420420417)
 export const CONTRACTS = {
-  router: '0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9',
-  factory: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0',
-  USDC: '0x5FbDB2315678afecb367f032d93F642f64180aa3',
-  MTK: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
-  pair: '0x5c513c7e4C1709b203Da1F3a6259a1afeB840e0B',
+  router: '0x8C36A10638bc4F273405f8074707b524a449DBDd',
+  factory: '0xF88990fADBb15D25296d9cf880FDB14b23cD30e9',
+  USDC: '0x220327D6A516eD8bC76f63037c3Df420872fAE4e',
+  MTK: '0xCC8BF21E1C4a63BbE26E2F39724bEaEA72BfeA15',
+  pair: '0xD418d4243Ee8c432Da2CDe33BC9D19B20E40212f',
 };
 
-// Local Hardhat contract addresses (chainId: 31337)
 export const CONTRACTS_LOCAL = {
-  router: '0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9',
-  factory: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0',
-  USDC: '0x5FbDB2315678afecb367f032d93F642f64180aa3',
-  MTK: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
-  pair: '0x5c513c7e4C1709b203Da1F3a6259a1afeB840e0B',
+  router: '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707',
+  factory: '0x0165878A594ca255338adfa4d48449f69242Eb8F',
+  USDC: '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707',
+  MTK: '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707',
+  pair: '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707',
 };
 
 // Localhost hardhat (chainId: 31337)
-const hardhatLocalhost = {
-  id: 31337,
-  name: 'Hardhat Local',
-  nativeCurrency: {
-    decimals: 18,
-    name: 'ETH',
-    symbol: 'ETH',
-  },
-  rpcUrls: {
-    default: {
-      http: ['http://127.0.0.1:8545'],
-    },
-  },
-};
+// Removed - using Polkadot Hub Testnet instead
 
 export const config = createConfig({
-  chains: [mainnet, sepolia, pasoero, hardhatLocalhost, polkadotHubTestnet],
+  chains: [mainnet, sepolia, pasoero, polkadotHubTestnet],
   connectors: [
     injected(),
   ],
@@ -98,7 +83,6 @@ export const config = createConfig({
     [mainnet.id]: http('https://eth.merkle.io'),
     [sepolia.id]: http('https://eth.merkle.io'),
     [pasoero.id]: http('https://rpc.paseo.xyz'),
-    [hardhatLocalhost.id]: http('http://127.0.0.1:8545'),
     [polkadotHubTestnet.id]: http('https://eth-rpc-testnet.polkadot.io'),
   },
 });

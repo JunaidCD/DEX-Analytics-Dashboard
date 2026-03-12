@@ -46,8 +46,8 @@ export default function SwapPage() {
   const [toast, setToast] = useState(null);
   const [priceImpact, setPriceImpact] = useState(0);
 
-  // Get contract addresses based on chain
-  const routerAddress = chainId === 31337 ? CONTRACTS.router : CONTRACTS.router;
+  // Get router address
+  const routerAddress = CONTRACTS.router;
 
   // Fix hydration - only render client-specific content after mount
   useEffect(() => {

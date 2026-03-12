@@ -4,11 +4,11 @@
 export const CONTRACTS = {
   // Polkadot Hub Testnet (chainId: 420420417)
   polkadotHubTestnet: {
-    router: '0x15Ea12D7c9d2BB84770403FCd371657aE7F1A8a2',
-    factory: '0x6aE1db2478C8eeE1B2F6B6D4AEea6EC5554099cF',
-    USDC: '0x2df99b1EEa84B9f3f87e2c4356691E7Ec7da943D',
-    MTK: '0x597515C09CbDbb8460E96370C4D13093BB517F61',
-    pair: '0x17DDDEE86d0a7ee51C3CEf285FdC15fDa99290dd',
+    router: '0x8C36A10638bc4F273405f8074707b524a449DBDd',
+    factory: '0xF88990fADBb15D25296d9cf880FDB14b23cD30e9',
+    USDC: '0x220327D6A516eD8bC76f63037c3Df420872fAE4e',
+    MTK: '0xCC8BF21E1C4a63BbE26E2F39724bEaEA72BfeA15',
+    pair: '0xD418d4243Ee8c432Da2CDe33BC9D19B20E40212f',
   },
   // Hardhat Localhost (chainId: 31337)
   localhost: {
@@ -39,13 +39,13 @@ export const TOKENS = [
     symbol: 'USDC',
     name: 'USD Coin',
     decimals: 6,
-    address: '0x2df99b1EEa84B9f3f87e2c4356691E7Ec7da943D',
+    address: '0x220327D6A516eD8bC76f63037c3Df420872fAE4e',
   },
   {
     symbol: 'MTK',
     name: 'Mock Token',
     decimals: 18,
-    address: '0x597515C09CbDbb8460E96370C4D13093BB517F61',
+    address: '0xCC8BF21E1C4a63BbE26E2F39724bEaEA72BfeA15',
   },
   {
     symbol: 'ETH',
