@@ -1,5 +1,4 @@
 // Contract addresses - Update these after deploying to testnet
-// For local testing, you can use hardhat localhost (chainId: 31337)
 
 export const CONTRACTS = {
   // Polkadot Hub Testnet (chainId: 420420417)

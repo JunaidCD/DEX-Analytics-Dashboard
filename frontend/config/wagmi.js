@@ -2,32 +2,7 @@
 
 import { http, createConfig } from 'wagmi';
 import { mainnet, sepolia } from 'wagmi/chains';
-import { injected } from 'wagmi/connectors';
-
-// Paseo Testnet Chain Definition
-const pasoero = {
-  id: 10000,
-  name: 'Pasoero',
-  nativeCurrency: {
-    decimals: 18,
-    name: 'STEP',
-    symbol: 'STEP',
-  },
-  rpcUrls: {
-    default: {
-      http: ['https://rpc.paseo.xyz'],
-    },
-    public: {
-      http: ['https://rpc.paseo.xyz'],
-    },
-  },
-  blockExplorers: {
-    default: {
-      name: 'Pasoero Explorer',
-      url: 'https://explorer.paseo.xyz',
-    },
-  },
-};
+import { injected, walletConnect } from 'wagmi/connectors';
 
 // Polkadot Hub Testnet (Paseo-based EVM)
 const polkadotHubTestnet = {
@@ -71,18 +46,14 @@ export const CONTRACTS_LOCAL = {
   pair: '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707',
 };
 
-// Localhost hardhat (chainId: 31337)
-// Removed - using Polkadot Hub Testnet instead
-
 export const config = createConfig({
-  chains: [mainnet, sepolia, pasoero, polkadotHubTestnet],
+  chains: [mainnet, sepolia, polkadotHubTestnet],
   connectors: [
     injected(),
   ],
   transports: {
-    [mainnet.id]: http('https://eth.merkle.io'),
-    [sepolia.id]: http('https://eth.merkle.io'),
-    [pasoero.id]: http('https://rpc.paseo.xyz'),
-    [polkadotHubTestnet.id]: http('https://eth-rpc-testnet.polkadot.io'),
+    [mainnet.id]: http(),
+    [sepolia.id]: http(),
+    [polkadotHubTestnet.id]: http(),
   },
 });
