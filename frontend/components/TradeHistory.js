@@ -3,9 +3,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { usePublicClient } from 'wagmi';
 import { formatUnits } from 'viem';
-import { CONTRACTS } from '../config/wagmi';
+import { getChainContracts } from '../config/wagmi';
 
-// Swap Event ABI
+// Swap Event ABI (from Pair contract)
 const SWAP_EVENT_ABI = {
   anonymous: false,
   inputs: [
@@ -20,13 +20,16 @@ const SWAP_EVENT_ABI = {
   type: 'event'
 };
 
-export default function TradeHistory({ pairAddress, token0 }) {
+export default function TradeHistory({ pairAddress, token0, chainId }) {
   const publicClient = usePublicClient();
   const [trades, setTrades] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(null);
   const [isWatching, setIsWatching] = useState(false);
+
+  // Get contracts for current chain
+  const activeContracts = getChainContracts(chainId);
 
   // Format address
   const formatAddress = (addr) => {
@@ -69,47 +72,49 @@ export default function TradeHistory({ pairAddress, token0 }) {
         blockTimestamps.map(({ blockNum, timestamp }) => [blockNum.toString(), timestamp])
       );
 
-      // Process logs into trades
-      const isUSDC0 = token0?.toLowerCase() === CONTRACTS.USDC.toLowerCase();
-      
-      const processedTrades = logs.slice(-20).reverse().map((log, index) => {
-        const amount0In = log.args.amount0In || 0n;
-        const amount1In = log.args.amount1In || 0n;
-        const amount0Out = log.args.amount0Out || 0n;
-        const amount1Out = log.args.amount1Out || 0n;
-        
-        // Calculate USDC and MTK amounts
-        let usdcAmount = 0;
-        let mtkAmount = 0;
-        let type = 'swap';
-        
-        if (isUSDC0) {
-          usdcAmount = Number(formatUnits(amount0In + amount0Out, 6));
-          mtkAmount = Number(formatUnits(amount1In + amount1Out, 18));
-          if (amount0In > 0n && amount1Out > 0n) type = 'buy'; // USDC -> MTK
-          else if (amount0Out > 0n && amount1In > 0n) type = 'sell'; // MTK -> USDC
-        } else {
-          usdcAmount = Number(formatUnits(amount1In + amount1Out, 6));
-          mtkAmount = Number(formatUnits(amount0In + amount0Out, 18));
-          if (amount1In > 0n && amount0Out > 0n) type = 'buy';
-          else if (amount1Out > 0n && amount0In > 0n) type = 'sell';
-        }
-
-        const price = mtkAmount > 0 ? (usdcAmount / mtkAmount) : 0;
-        
-        return {
-          id: `${log.transactionHash}-${index}`,
-          timestamp: timestampMap[log.blockNumber.toString()] || 0n,
-          blockNumber: log.blockNumber,
-          trader: log.args.sender,
-          to: log.args.to,
-          usdcAmount,
-          mtkAmount,
-          price,
-          type,
-          hash: log.transactionHash,
-        };
-      });
+       // Process logs into trades
+       const isUSDC0 = token0?.toLowerCase() === activeContracts.USDC.toLowerCase();
+       
+        const processedTrades = logs.slice(-20).reverse().map((log, index) => {
+          const amount0In = log.args.amount0In || 0n;
+          const amount1In = log.args.amount1In || 0n;
+          const amount0Out = log.args.amount0Out || 0n;
+          const amount1Out = log.args.amount1Out || 0n;
+          
+          // Calculate USDC and MTK amounts based on token0
+          let usdcAmount = 0;
+          let mtkAmount = 0;
+          let type = 'swap';
+          
+          if (isUSDC0) {
+            // token0 is USDC, token1 is MTK
+            usdcAmount = Number(formatUnits(amount0In + amount0Out, 6));
+            mtkAmount = Number(formatUnits(amount1In + amount1Out, 18));
+            if (amount0In > 0n && amount1Out > 0n) type = 'buy'; // USDC -> MTK
+            else if (amount0Out > 0n && amount1In > 0n) type = 'sell'; // MTK -> USDC
+          } else {
+            // token0 is MTK, token1 is USDC
+            usdcAmount = Number(formatUnits(amount1In + amount1Out, 6));
+            mtkAmount = Number(formatUnits(amount0In + amount0Out, 18));
+            if (amount1In > 0n && amount0Out > 0n) type = 'buy';
+            else if (amount1Out > 0n && amount0In > 0n) type = 'sell';
+          }
+   
+          const price = mtkAmount > 0 ? (usdcAmount / mtkAmount) : 0;
+          
+          return {
+            id: `${log.transactionHash}-${index}`,
+            timestamp: timestampMap[log.blockNumber.toString()] || 0n,
+            blockNumber: log.blockNumber,
+            trader: log.args.sender,
+            to: log.args.to,
+            usdcAmount,
+            mtkAmount,
+            price,
+            type,
+            hash: log.transactionHash,
+          };
+        });
 
       setTrades(processedTrades);
       setLastUpdated(new Date());
@@ -134,49 +139,52 @@ export default function TradeHistory({ pairAddress, token0 }) {
           event: SWAP_EVENT_ABI,
           onLogs: (logs) => {
             // Add new trades to the top
-            const isUSDC0 = token0?.toLowerCase() === CONTRACTS.USDC.toLowerCase();
+            const isUSDC0 = token0?.toLowerCase() === activeContracts.USDC.toLowerCase();
             
-            logs.forEach(async (log) => {
-              const block = await publicClient.getBlock({ blockNumber: log.blockNumber });
-              
-              const amount0In = log.args.amount0In || 0n;
-              const amount1In = log.args.amount1In || 0n;
-              const amount0Out = log.args.amount0Out || 0n;
-              const amount1Out = log.args.amount1Out || 0n;
-              
-              let usdcAmount = 0;
-              let mtkAmount = 0;
-              let type = 'swap';
-              
-              if (isUSDC0) {
-                usdcAmount = Number(formatUnits(amount0In + amount0Out, 6));
-                mtkAmount = Number(formatUnits(amount1In + amount1Out, 18));
-                if (amount0In > 0n && amount1Out > 0n) type = 'buy';
-                else if (amount0Out > 0n && amount1In > 0n) type = 'sell';
-              } else {
-                usdcAmount = Number(formatUnits(amount1In + amount1Out, 6));
-                mtkAmount = Number(formatUnits(amount0In + amount0Out, 18));
-                if (amount1In > 0n && amount0Out > 0n) type = 'buy';
-                else if (amount1Out > 0n && amount0In > 0n) type = 'sell';
-              }
-              
-              const price = mtkAmount > 0 ? (usdcAmount / mtkAmount) : 0;
-              
-              const newTrade = {
-                id: `${log.transactionHash}-new`,
-                timestamp: block.timestamp,
-                blockNumber: log.blockNumber,
-                trader: log.args.sender,
-                to: log.args.to,
-                usdcAmount,
-                mtkAmount,
-                price,
-                type,
-                hash: log.transactionHash,
-              };
-              
-              setTrades(prev => [newTrade, ...prev.slice(0, 19)]);
-            });
+              logs.forEach(async (log) => {
+                const block = await publicClient.getBlock({ blockNumber: log.blockNumber });
+                
+                const amount0In = log.args.amount0In || 0n;
+                const amount1In = log.args.amount1In || 0n;
+                const amount0Out = log.args.amount0Out || 0n;
+                const amount1Out = log.args.amount1Out || 0n;
+                
+                // Calculate USDC and MTK amounts based on token0
+                let usdcAmount = 0;
+                let mtkAmount = 0;
+                let type = 'swap';
+                
+                if (isUSDC0) {
+                  // token0 is USDC, token1 is MTK
+                  usdcAmount = Number(formatUnits(amount0In + amount0Out, 6));
+                  mtkAmount = Number(formatUnits(amount1In + amount1Out, 18));
+                  if (amount0In > 0n && amount1Out > 0n) type = 'buy'; // USDC -> MTK
+                  else if (amount0Out > 0n && amount1In > 0n) type = 'sell'; // MTK -> USDC
+                } else {
+                  // token0 is MTK, token1 is USDC
+                  usdcAmount = Number(formatUnits(amount1In + amount1Out, 6));
+                  mtkAmount = Number(formatUnits(amount0In + amount0Out, 18));
+                  if (amount1In > 0n && amount0Out > 0n) type = 'buy';
+                  else if (amount1Out > 0n && amount0In > 0n) type = 'sell';
+                }
+                
+                const price = mtkAmount > 0 ? (usdcAmount / mtkAmount) : 0;
+                
+                const newTrade = {
+                  id: `${log.transactionHash}-new`,
+                  timestamp: block.timestamp,
+                  blockNumber: log.blockNumber,
+                  trader: log.args.sender,
+                  to: log.args.to,
+                  usdcAmount,
+                  mtkAmount,
+                  price,
+                  type,
+                  hash: log.transactionHash,
+                };
+                
+                setTrades(prev => [newTrade, ...prev.slice(0, 19)]);
+              });
             
             setLastUpdated(new Date());
           },

@@ -1,6 +1,6 @@
 'use client';
 
-import { useAccount, useConnect, useDisconnect, useBalance, useConnectors } from 'wagmi';
+import { useAccount, useConnect, useDisconnect, useBalance, useConnectors, useSwitchChain } from 'wagmi';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
@@ -8,6 +8,7 @@ export default function Header() {
   const { address, isConnected, chainId } = useAccount();
   const { connectors, connect } = useConnect();
   const { disconnect } = useDisconnect();
+  const { switchChain } = useSwitchChain();
   const { data: balance } = useBalance({
     address,
   });
@@ -59,6 +60,15 @@ export default function Header() {
     }
   };
 
+  const handleSwitchNetwork = async () => {
+    try {
+      await switchChain({ chainId: 420420417 });
+    } catch (error) {
+      console.error('Network switch error:', error);
+      alert('Failed to switch network: ' + error.message);
+    }
+  };
+
   if (!mounted) {
     return (
       <header className="header">
@@ -88,7 +98,14 @@ export default function Header() {
         <div className="wallet-section">
           {isConnected ? (
             <div className="wallet-info">
-              <span className="chain-badge">{getChainName(chainId)}</span>
+              <span className={`chain-badge ${chainId === 420420417 ? 'correct-chain' : 'wrong-chain'}`}>
+                {getChainName(chainId)}
+              </span>
+              {chainId !== 420420417 && (
+                <button onClick={handleSwitchNetwork} className="switch-network-btn">
+                  Switch to Polkadot Hub
+                </button>
+              )}
               <span className="balance">
                 {balance ? `${Number(balance.formatted).toFixed(4)} ${balance.symbol}` : '...'}
               </span>

@@ -3,12 +3,12 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useAccount, useReadContract, usePublicClient, useChainId } from 'wagmi';
 import { parseUnits, formatUnits, parseEventLogs } from 'viem';
-import { CONTRACTS } from '../../config/wagmi';
+import { CHAIN_CONTRACTS, getChainContracts } from '../../config/wagmi';
 import { ERC20_ABI, ROUTER_ABI, PAIR_ABI, FACTORY_ABI } from '../../config/abis';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import TradeHistory from '../../components/TradeHistory';
 
-// Swap Event ABI for parsing logs
+// Swap Event ABI for parsing logs (from Pair contract)
 const SWAP_EVENT_ABI = {
   anonymous: false,
   inputs: [
@@ -34,8 +34,8 @@ export default function DashboardPage() {
   const [swapEvents, setSwapEvents] = useState([]);
   const [loadingEvents, setLoadingEvents] = useState(false);
 
-  // Get contract addresses - use Polkadot Hub Testnet (420420417)
-  const activeContracts = chainId === 420420417 ? CONTRACTS : CONTRACTS;
+  // Get contract addresses for current chain
+  const activeContracts = getChainContracts(chainId);
 
   useEffect(() => {
     setMounted(true);
@@ -90,55 +90,63 @@ export default function DashboardPage() {
         
         setSwapEvents(logs);
         
-        // Process swap events to get price history
-        if (logs.length > 0 && reserves && token0) {
-          const isUSDC0 = token0.toLowerCase() === CONTRACTS.USDC.toLowerCase();
-          
-          // Get last 7 swaps for price history
-          const recentSwaps = logs.slice(-7);
-          const history = recentSwaps.map((log, i) => {
-            const amount0In = log.args.amount0In || 0n;
-            const amount1In = log.args.amount1In || 0n;
-            const amount0Out = log.args.amount0Out || 0n;
-            const amount1Out = log.args.amount1Out || 0n;
+          // Process swap events to get price history
+          if (logs.length > 0 && reserves && token0) {
+            const isUSDC0 = token0.toLowerCase() === activeContracts.USDC.toLowerCase();
             
-            const usdcIn = isUSDC0 ? amount0In : amount1In;
-            const usdcOut = isUSDC0 ? amount0Out : amount1Out;
-            const mtkIn = isUSDC0 ? amount1In : amount0In;
-            const mtkOut = isUSDC0 ? amount1Out : amount0Out;
-            
-            const totalUSDC = usdcIn + usdcOut;
-            const totalMTK = mtkIn + mtkOut;
-            
-            let price;
-            if (totalUSDC > 0n && totalMTK > 0n) {
-              price = Number(formatUnits(totalUSDC, 6)) / Number(formatUnits(totalMTK, 18));
-            } else {
-              price = 3250; // default
-            }
-            
-            return {
-              time: `T${i + 1}`,
-              price: price,
-              swap: true
-            };
-          });
-          
-          setPriceHistory(history);
-        } else {
-          // Generate mock data if no events
-          const mockData = [];
-          let price = 3250;
-          for (let i = 6; i >= 0; i--) {
-            price = price + (Math.random() - 0.5) * 100;
-            mockData.push({
-              time: `T${7 - i}`,
-              price: price,
-              swap: false
+            // Get last 7 swaps for price history
+            const recentSwaps = logs.slice(-7);
+            const history = recentSwaps.map((log, i) => {
+              const amount0In = log.args.amount0In || 0n;
+              const amount1In = log.args.amount1In || 0n;
+              const amount0Out = log.args.amount0Out || 0n;
+              const amount1Out = log.args.amount1Out || 0n;
+              
+              let price;
+              if (isUSDC0) {
+                // token0 is USDC, token1 is MTK
+                const totalUSDC = amount0In + amount0Out;
+                const totalMTK = amount1In + amount1Out;
+                
+                if (totalUSDC > 0n && totalMTK > 0n) {
+                  price = Number(formatUnits(totalUSDC, 6)) / Number(formatUnits(totalMTK, 18));
+                } else {
+                  price = 3250; // default
+                }
+              } else {
+                // token0 is MTK, token1 is USDC
+                const totalUSDC = amount1In + amount1Out;
+                const totalMTK = amount0In + amount0Out;
+                
+                if (totalUSDC > 0n && totalMTK > 0n) {
+                  price = Number(formatUnits(totalUSDC, 6)) / Number(formatUnits(totalMTK, 18));
+                } else {
+                  price = 3250; // default
+                }
+              }
+              
+              return {
+                time: `T${i + 1}`,
+                price: price,
+                swap: true
+              };
             });
+            
+            setPriceHistory(history);
+          } else {
+            // Generate mock data if no events
+            const mockData = [];
+            let price = 3250;
+            for (let i = 6; i >= 0; i--) {
+              price = price + (Math.random() - 0.5) * 100;
+              mockData.push({
+                time: `T${7 - i}`,
+                price: price,
+                swap: false
+              });
+            }
+            setPriceHistory(mockData);
           }
-          setPriceHistory(mockData);
-        }
       } catch (error) {
         console.log('Error fetching swap events:', error);
         // Fall back to mock data
@@ -166,7 +174,7 @@ export default function DashboardPage() {
   // Calculate current price
   const currentPrice = useMemo(() => {
     if (!reserves || !token0) return 0;
-    const isUSDC0 = token0.toLowerCase() === CONTRACTS.USDC.toLowerCase();
+    const isUSDC0 = token0.toLowerCase() === activeContracts.USDC.toLowerCase();
     const reserveUSDC = isUSDC0 ? reserves[0] : reserves[1];
     const reserveMTK = isUSDC0 ? reserves[1] : reserves[0];
     if (reserveMTK === 0n) return 0;
@@ -178,7 +186,7 @@ export default function DashboardPage() {
     if (!slippageInput || !reserves || !token0) return { impact: 0, output: 0 };
     
     const amountIn = parseUnits(slippageInput, 6);
-    const isUSDC0 = token0.toLowerCase() === CONTRACTS.USDC.toLowerCase();
+    const isUSDC0 = token0.toLowerCase() === activeContracts.USDC.toLowerCase();
     const reserveIn = isUSDC0 ? reserves[0] : reserves[1];
     const reserveOut = isUSDC0 ? reserves[1] : reserves[0];
     
@@ -229,19 +237,31 @@ export default function DashboardPage() {
     };
   }, [lpAmount, reserves, token0, currentPrice, lpBalance]);
 
-  // 24h volume from swap events
-  const volume24h = useMemo(() => {
-    if (swapEvents.length === 0) return '0';
-    // Estimate volume from events
-    const total = swapEvents.reduce((acc, log) => {
-      const isUSDC0 = token0?.toLowerCase() === CONTRACTS.USDC.toLowerCase();
-      const amount0In = log.args.amount0In || 0n;
-      const amount0Out = log.args.amount0Out || 0n;
-      const usdcAmount = isUSDC0 ? amount0In + amount0Out : (log.args.amount1In || 0n) + (log.args.amount1Out || 0n);
-      return acc + Number(formatUnits(usdcAmount, 6));
-    }, 0);
-    return total.toFixed(2);
-  }, [swapEvents, token0]);
+    // 24h volume from swap events
+    const volume24h = useMemo(() => {
+      if (swapEvents.length === 0) return '0';
+      // Estimate volume from events
+      const total = swapEvents.reduce((acc, log) => {
+        const isUSDC0 = token0?.toLowerCase() === activeContracts.USDC.toLowerCase();
+        const amount0In = log.args.amount0In || 0n;
+        const amount1In = log.args.amount1In || 0n;
+        const amount0Out = log.args.amount0Out || 0n;
+        const amount1Out = log.args.amount1Out || 0n;
+        
+        // Calculate USDC amount involved in swap
+        let usdcAmount = 0n;
+        if (isUSDC0) {
+          // token0 is USDC, token1 is MTK
+          usdcAmount = amount0In + amount0Out;
+        } else {
+          // token0 is MTK, token1 is USDC
+          usdcAmount = amount1In + amount1Out;
+        }
+        
+        return acc + usdcAmount;
+      }, 0n);
+      return Number(formatUnits(total, 6)).toFixed(2);
+    }, [swapEvents, token0]);
 
   if (!mounted) {
     return (
@@ -428,7 +448,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Trade History */}
-          <TradeHistory pairAddress={pairAddress} token0={token0} />
+          <TradeHistory pairAddress={pairAddress} token0={token0} chainId={chainId} />
         </>
       )}
     </div>

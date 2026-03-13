@@ -186,6 +186,36 @@ body::before {
   border: 1px solid rgba(99, 102, 241, 0.3);
 }
 
+.chain-badge.correct-chain {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2));
+  color: var(--success);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.chain-badge.wrong-chain {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.2));
+  color: var(--warning);
+  border-color: rgba(245, 158, 11, 0.3);
+  animation: pulse 2s infinite;
+}
+
+.switch-network-btn {
+  background: var(--warning);
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.switch-network-btn:hover {
+  background: #d97706;
+  transform: translateY(-1px);
+}
+
 .balance {
   color: var(--success);
   font-weight: 600;

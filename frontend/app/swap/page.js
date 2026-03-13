@@ -16,30 +16,23 @@ export default function SwapPage() {
     return getChainContracts(chainId);
   }, [chainId]);
 
-  // Token list - update addresses after deployment
-  const TOKENS = useMemo(() => [
-    { 
-      symbol: 'USDC', 
-      name: 'USD Coin', 
-      decimals: 6, 
-      address: CONTRACTS.USDC,
-      logo: '💵'
-    },
-    { 
-      symbol: 'MTK', 
-      name: 'Mock Token', 
-      decimals: 18, 
-      address: CONTRACTS.MTK,
-      logo: '🪙'
-    },
-    { 
-      symbol: 'ETH', 
-      name: 'Ethereum', 
-      decimals: 18, 
-      address: '0x0000000000000000000000000000000000000000',
-      logo: 'Ξ'
-    },
-  ], [CONTRACTS]);
+   // Token list - update addresses after deployment
+   const TOKENS = useMemo(() => [
+     { 
+       symbol: 'USDC', 
+       name: 'USD Coin', 
+       decimals: 6, 
+       address: CONTRACTS.USDC,
+       logo: '💵'
+     },
+     { 
+       symbol: 'MTK', 
+       name: 'Mock Token', 
+       decimals: 18, 
+       address: CONTRACTS.MTK,
+       logo: '🪙'
+     },
+   ], [CONTRACTS]);
 
   const [fromToken, setFromToken] = useState(TOKENS[0]);
   const [toToken, setToToken] = useState(TOKENS[1]);
@@ -184,51 +177,55 @@ export default function SwapPage() {
     hash: swapData,
   });
 
-  // Handle approval
-  const handleApprove = async () => {
-    if (!fromToken.address || fromToken.address === '0x0000000000000000000000000000000000000000') return;
-    
-    try {
-      writeApprove({
-        address: fromToken.address,
-        abi: ERC20_ABI,
-        functionName: 'approve',
-        args: [routerAddress, parseUnits(fromAmount || '999999999', fromToken.decimals)],
-      });
-    } catch (error) {
-      showToast('Approval failed: ' + error.message, 'error');
-    }
-  };
+   // Handle approval
+   const handleApprove = async () => {
+     if (!fromToken.address || fromToken.address === '0x0000000000000000000000000000000000000000') return;
+     
+     try {
+       writeApprove({
+         address: fromToken.address,
+         abi: ERC20_ABI,
+         functionName: 'approve',
+         args: [routerAddress, parseUnits(fromAmount || '999999999', fromToken.decimals)],
+         maxPriorityFeePerGas: BigInt(25000000000), // 25 gwei
+         maxFeePerGas: BigInt(30000000000), // 30 gwei
+       });
+     } catch (error) {
+       showToast('Approval failed: ' + error.message, 'error');
+     }
+   };
 
-  // Handle swap
-  const handleSwap = async () => {
-    if (!fromAmount || !toAmount) return;
-    if (!pairAddress) {
-      showToast('Trading pair does not exist. Please create liquidity first.', 'error');
-      return;
-    }
-    if (routerAddress === '0x0000000000000000000000000000000000000000') {
-      showToast('Router contract not deployed on this network.', 'error');
-      return;
-    }
-    
-    try {
-      const amountIn = parseUnits(fromAmount, fromToken.decimals);
-      const path = [fromToken.address, toToken.address];
-      const deadline = Math.floor(Date.now() / 1000) + 3600; // 1 hour
+   // Handle swap
+   const handleSwap = async () => {
+     if (!fromAmount || !toAmount) return;
+     if (!pairAddress) {
+       showToast('Trading pair does not exist. Please create liquidity first.', 'error');
+       return;
+     }
+     if (routerAddress === '0x0000000000000000000000000000000000000000') {
+       showToast('Router contract not deployed on this network.', 'error');
+       return;
+     }
+     
+     try {
+       const amountIn = parseUnits(fromAmount, fromToken.decimals);
+       const path = [fromToken.address, toToken.address];
+       const deadline = Math.floor(Date.now() / 1000) + 3600; // 1 hour
 
-      writeSwap({
-        address: routerAddress,
-        abi: ROUTER_ABI,
-        functionName: 'swapExactTokensForTokens',
-        args: [amountIn, minOutput, path, address, deadline],
-        value: 0n,
-        gas: BigInt(500000),
-      });
-    } catch (error) {
-      showToast('Swap failed: ' + error.message, 'error');
-    }
-  };
+       writeSwap({
+         address: routerAddress,
+         abi: ROUTER_ABI,
+         functionName: 'swapExactTokensForTokens',
+         args: [amountIn, minOutput, path, address, deadline],
+         value: 0n,
+         gas: BigInt(500000),
+         maxPriorityFeePerGas: BigInt(25000000000), // 25 gwei
+         maxFeePerGas: BigInt(30000000000), // 30 gwei
+       });
+     } catch (error) {
+       showToast('Swap failed: ' + error.message, 'error');
+     }
+   };
 
   // Show toast notification
   const showToast = (message, type = 'info') => {
