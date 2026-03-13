@@ -182,13 +182,12 @@ export default function SwapPage() {
      if (!fromToken.address || fromToken.address === '0x0000000000000000000000000000000000000000') return;
      
      try {
+       const amount = parseUnits(fromAmount || '999999999', fromToken.decimals);
        writeApprove({
          address: fromToken.address,
          abi: ERC20_ABI,
          functionName: 'approve',
-         args: [routerAddress, parseUnits(fromAmount || '999999999', fromToken.decimals)],
-         maxPriorityFeePerGas: BigInt(25000000000), // 25 gwei
-         maxFeePerGas: BigInt(30000000000), // 30 gwei
+         args: [routerAddress, amount],
        });
      } catch (error) {
        showToast('Approval failed: ' + error.message, 'error');
@@ -218,9 +217,6 @@ export default function SwapPage() {
          functionName: 'swapExactTokensForTokens',
          args: [amountIn, minOutput, path, address, deadline],
          value: 0n,
-         gas: BigInt(500000),
-         maxPriorityFeePerGas: BigInt(25000000000), // 25 gwei
-         maxFeePerGas: BigInt(30000000000), // 30 gwei
        });
      } catch (error) {
        showToast('Swap failed: ' + error.message, 'error');
