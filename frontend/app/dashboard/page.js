@@ -8,6 +8,12 @@ import { ERC20_ABI, ROUTER_ABI, PAIR_ABI, FACTORY_ABI } from '../../config/abis'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import TradeHistory from '../../components/TradeHistory';
 
+// Import utility functions
+import { formatTokenValue, formatUSD, formatNumber, formatPercentage, formatPrice, TOKEN_DECIMALS } from '../../utils/formatToken';
+import { calculateCurrentPrice, calculatePriceFromSwap } from '../../utils/calculatePrice';
+import { calculateTVL, calculate24hVolume } from '../../utils/calculateTVL';
+import { calculateImpermanentLoss, calculateLPPnL } from '../../utils/calculateImpermanentLoss';
+
 // Swap Event ABI for parsing logs (from Pair contract)
 const SWAP_EVENT_ABI = {
   anonymous: false,
@@ -97,33 +103,16 @@ export default function DashboardPage() {
             // Get last 7 swaps for price history
             const recentSwaps = logs.slice(-7);
             const history = recentSwaps.map((log, i) => {
-              const amount0In = log.args.amount0In || 0n;
-              const amount1In = log.args.amount1In || 0n;
-              const amount0Out = log.args.amount0Out || 0n;
-              const amount1Out = log.args.amount1Out || 0n;
+              const amount0In = log.args.amount0In || BigInt(0);
+              const amount1In = log.args.amount1In || BigInt(0);
+              const amount0Out = log.args.amount0Out || BigInt(0);
+              const amount1Out = log.args.amount1Out || BigInt(0);
               
-              let price;
-              if (isUSDC0) {
-                // token0 is USDC, token1 is MTK
-                const totalUSDC = amount0In + amount0Out;
-                const totalMTK = amount1In + amount1Out;
-                
-                if (totalUSDC > 0n && totalMTK > 0n) {
-                  price = Number(formatUnits(totalUSDC, 6)) / Number(formatUnits(totalMTK, 18));
-                } else {
-                  price = 3250; // default
-                }
-              } else {
-                // token0 is MTK, token1 is USDC
-                const totalUSDC = amount1In + amount1Out;
-                const totalMTK = amount0In + amount0Out;
-                
-                if (totalUSDC > 0n && totalMTK > 0n) {
-                  price = Number(formatUnits(totalUSDC, 6)) / Number(formatUnits(totalMTK, 18));
-                } else {
-                  price = 3250; // default
-                }
-              }
+              // Use utility function to calculate price
+              const price = calculatePriceFromSwap(
+                amount0In, amount0Out, amount1In, amount1Out,
+                token0, activeContracts.USDC, activeContracts.MTK
+              );
               
               return {
                 time: `T${i + 1}`,
@@ -134,33 +123,13 @@ export default function DashboardPage() {
             
             setPriceHistory(history);
           } else {
-            // Generate mock data if no events
-            const mockData = [];
-            let price = 3250;
-            for (let i = 6; i >= 0; i--) {
-              price = price + (Math.random() - 0.5) * 100;
-              mockData.push({
-                time: `T${7 - i}`,
-                price: price,
-                swap: false
-              });
-            }
-            setPriceHistory(mockData);
+            // No swap events found - show empty state
+            setPriceHistory([]);
           }
       } catch (error) {
         console.log('Error fetching swap events:', error);
-        // Fall back to mock data
-        const mockData = [];
-        let price = 3250;
-        for (let i = 6; i >= 0; i--) {
-          price = price + (Math.random() - 0.5) * 100;
-          mockData.push({
-            time: `T${7 - i}`,
-            price: price,
-            swap: false
-          });
-        }
-        setPriceHistory(mockData);
+        // No mock data - show empty state
+        setPriceHistory([]);
       } finally {
         setLoadingEvents(false);
       }
@@ -171,17 +140,13 @@ export default function DashboardPage() {
     }
   }, [mounted, pairAddress, publicClient, reserves, token0]);
 
-  // Calculate current price
+  // Calculate current price using utility function
   const currentPrice = useMemo(() => {
     if (!reserves || !token0) return 0;
-    const isUSDC0 = token0.toLowerCase() === activeContracts.USDC.toLowerCase();
-    const reserveUSDC = isUSDC0 ? reserves[0] : reserves[1];
-    const reserveMTK = isUSDC0 ? reserves[1] : reserves[0];
-    if (reserveMTK === 0n) return 0;
-    return Number(formatUnits(reserveUSDC * parseUnits('1', 18), 6)) / Number(formatUnits(reserveMTK, 18));
-  }, [reserves, token0]);
+    return calculateCurrentPrice(reserves, token0, activeContracts.USDC, activeContracts.MTK);
+  }, [reserves, token0, activeContracts]);
 
-  // Calculate slippage impact
+  // Calculate slippage impact using proper token normalization
   const slippageImpact = useMemo(() => {
     if (!slippageInput || !reserves || !token0) return { impact: 0, output: 0 };
     
@@ -190,78 +155,56 @@ export default function DashboardPage() {
     const reserveIn = isUSDC0 ? reserves[0] : reserves[1];
     const reserveOut = isUSDC0 ? reserves[1] : reserves[0];
     
-    if (reserveIn <= 0n || reserveOut <= 0n) return { impact: 0, output: 0 };
+    if (reserveIn <= BigInt(0) || reserveOut <= BigInt(0)) return { impact: 0, output: 0 };
     
-    const amountInWithFee = amountIn * 997n;
+    const amountInWithFee = amountIn * BigInt(997);
     const numerator = amountInWithFee * reserveOut;
-    const denominator = reserveIn * 1000n + amountInWithFee;
+    const denominator = reserveIn * BigInt(1000) + amountInWithFee;
     const output = numerator / denominator;
     
-    const spotPrice = Number(formatUnits((reserveOut * parseUnits('1', 6)) / reserveIn, 6));
-    const actualPrice = Number(formatUnits((output * parseUnits('1', 6)) / amountIn, 6));
-    const impact = ((spotPrice - actualPrice) / spotPrice) * 100;
+    // Convert to human-readable numbers for price calculation
+    const spotPrice = formatTokenValue(reserveOut, TOKEN_DECIMALS.USDC) / formatTokenValue(reserveIn, TOKEN_DECIMALS.MTK);
+    const actualPrice = formatTokenValue(output, TOKEN_DECIMALS.MTK) / formatTokenValue(amountIn, TOKEN_DECIMALS.USDC);
+    const impact = spotPrice > 0 ? ((spotPrice - actualPrice) / spotPrice) * 100 : 0;
     
     return {
       impact: Number(impact),
-      output: Number(formatUnits(output, 18)),
+      output: formatTokenValue(output, TOKEN_DECIMALS.MTK),
     };
-  }, [slippageInput, reserves, token0]);
+  }, [slippageInput, reserves, token0, activeContracts]);
 
-  // Calculate LP PnL
+  // Calculate LP PnL using utility function
   const lpPnL = useMemo(() => {
     if (!lpAmount || !reserves || !token0 || !lpBalance) {
-      return { impermanentLoss: 0, feesEarned: 0, totalPnL: 0 };
+      return { impermanentLoss: 0, feesEarned: 0, totalPnL: 0, currentValue: 0, initialValue: 0 };
     }
 
-    const lpTokens = parseUnits(lpAmount, 18);
-    const totalSupply = parseUnits('1000', 18);
-    const poolValueUSDC = Number(formatUnits(reserves[0], 6));
-    const poolValueMTK = Number(formatUnits(reserves[1], 18));
+    // Use current reserves as both current and initial for simplicity
+    // In a real app, you'd track initial reserves when LP was added
+    const result = calculateLPPnL(
+      Number(lpAmount),
+      reserves,
+      reserves, // Using same reserves for simplicity
+      token0,
+      activeContracts.USDC,
+      activeContracts.MTK,
+      currentPrice
+    );
     
-    const userShare = Number(lpTokens) / Number(totalSupply);
-    const initialUSDC = poolValueUSDC * 0.5 * userShare;
-    const initialMTK = poolValueMTK * 0.5 * userShare;
-    const initialValueUSD = initialUSDC + (initialMTK * currentPrice);
-    
-    const currentUSDC = poolValueUSDC * userShare;
-    const currentMTK = poolValueMTK * userShare;
-    const currentValueUSD = currentUSDC + (currentMTK * currentPrice);
-    
-    const impermanentLoss = ((currentValueUSD / initialValueUSD) - 1) * 100;
-    const feesEarned = Number(lpAmount) * 0.003 * currentPrice;
-    
-    return {
-      impermanentLoss,
-      feesEarned,
-      totalPnL: impermanentLoss + (feesEarned / initialValueUSD * 100),
-    };
-  }, [lpAmount, reserves, token0, currentPrice, lpBalance]);
+    return result;
+  }, [lpAmount, reserves, token0, currentPrice, lpBalance, activeContracts]);
 
-    // 24h volume from swap events
-    const volume24h = useMemo(() => {
-      if (swapEvents.length === 0) return '0';
-      // Estimate volume from events
-      const total = swapEvents.reduce((acc, log) => {
-        const isUSDC0 = token0?.toLowerCase() === activeContracts.USDC.toLowerCase();
-        const amount0In = log.args.amount0In || 0n;
-        const amount1In = log.args.amount1In || 0n;
-        const amount0Out = log.args.amount0Out || 0n;
-        const amount1Out = log.args.amount1Out || 0n;
-        
-        // Calculate USDC amount involved in swap
-        let usdcAmount = 0n;
-        if (isUSDC0) {
-          // token0 is USDC, token1 is MTK
-          usdcAmount = amount0In + amount0Out;
-        } else {
-          // token0 is MTK, token1 is USDC
-          usdcAmount = amount1In + amount1Out;
-        }
-        
-        return acc + usdcAmount;
-      }, 0n);
-      return Number(formatUnits(total, 6)).toFixed(2);
-    }, [swapEvents, token0]);
+  // Calculate 24h volume using utility function
+  const volume24h = useMemo(() => {
+    const volume = calculate24hVolume(swapEvents, token0, activeContracts.USDC, activeContracts.MTK);
+    return formatNumber(volume, 2);
+  }, [swapEvents, token0, activeContracts]);
+
+  // Calculate TVL using utility function
+  const poolTVL = useMemo(() => {
+    if (!reserves || !token0) return 0;
+    return calculateTVL(reserves, token0, activeContracts.USDC, activeContracts.MTK, currentPrice);
+  }, [reserves, token0, currentPrice, activeContracts]);
 
   if (!mounted) {
     return (
@@ -291,20 +234,20 @@ export default function DashboardPage() {
           <div className="dashboard-grid">
             <div className="stat-card">
               <div className="stat-label">Current Price (USDC/MTK)</div>
-              <div className="stat-value">${currentPrice.toFixed(2)}</div>
+              <div className="stat-value">{formatPrice(currentPrice)}</div>
             </div>
             <div className="stat-card">
               <div className="stat-label">24h Trading Volume</div>
-              <div className="stat-value positive">${volume24h}</div>
+              <div className="stat-value positive">{formatUSD(Number(volume24h.replace(/[^0-9.]/g, '')))}</div>
             </div>
             <div className="stat-card">
               <div className="stat-label">Your LP Balance</div>
-              <div className="stat-value">{lpBalance ? formatUnits(lpBalance, 18).slice(0, 8) : '0'} LP</div>
+              <div className="stat-value">{lpBalance ? formatNumber(formatTokenValue(lpBalance, TOKEN_DECIMALS.MTK), 4) : '0'} LP</div>
             </div>
             <div className="stat-card">
               <div className="stat-label">Pool TVL</div>
               <div className="stat-value">
-                ${reserves ? (Number(formatUnits(reserves[0], 6)) + Number(formatUnits(reserves[1], 18)) * currentPrice).toFixed(0) : '0'}
+                {formatUSD(poolTVL)}
               </div>
             </div>
           </div>
@@ -345,8 +288,10 @@ export default function DashboardPage() {
                 />
               </LineChart>
             </ResponsiveContainer>
-            {swapEvents.length === 0 && (
-              <p className="chart-note">No swap events found. Make some swaps to see the price chart!</p>
+            {priceHistory.length === 0 && (
+              <div className="empty-chart-state">
+                <p>No swap events found. Make some swaps to see the price chart!</p>
+              </div>
             )}
           </div>
 
@@ -369,17 +314,17 @@ export default function DashboardPage() {
               <div className="analytics-result">
                 <div className="result-row">
                   <span>Estimated Output:</span>
-                  <span className="result-value">{slippageImpact.output.toFixed(4)} MTK</span>
+                  <span className="result-value">{formatNumber(slippageImpact.output, 4)} MTK</span>
                 </div>
                 <div className="result-row">
                   <span>Price Impact:</span>
                   <span className={`result-value ${slippageImpact.impact > 5 ? 'text-error' : slippageImpact.impact > 1 ? 'text-warning' : 'text-success'}`}>
-                    {slippageImpact.impact.toFixed(2)}%
+                    {formatPercentage(slippageImpact.impact)}
                   </span>
                 </div>
                 <div className="result-row">
                   <span>Slippage (0.3%):</span>
-                  <span className="result-value">{(slippageImpact.output * 0.003).toFixed(4)} MTK</span>
+                  <span className="result-value">{formatNumber(slippageImpact.output * 0.003, 4)} MTK</span>
                 </div>
               </div>
             </div>
@@ -403,17 +348,17 @@ export default function DashboardPage() {
                 <div className="result-row">
                   <span>Impermanent Loss:</span>
                   <span className={`result-value ${lpPnL.impermanentLoss >= 0 ? 'text-success' : 'text-error'}`}>
-                    {lpPnL.impermanentLoss.toFixed(2)}%
+                    {formatPercentage(lpPnL.impermanentLoss)}
                   </span>
                 </div>
                 <div className="result-row">
                   <span>Fees Earned (est.):</span>
-                  <span className="result-value text-success">${lpPnL.feesEarned.toFixed(2)}</span>
+                  <span className="result-value text-success">{formatUSD(lpPnL.feesEarned)}</span>
                 </div>
                 <div className="result-row total">
                   <span>Total PnL:</span>
                   <span className={`result-value ${lpPnL.totalPnL >= 0 ? 'text-success' : 'text-error'}`}>
-                    {lpPnL.totalPnL.toFixed(2)}%
+                    {formatPercentage(lpPnL.totalPnL)}
                   </span>
                 </div>
               </div>
@@ -440,7 +385,7 @@ export default function DashboardPage() {
               </div>
               <div className="pool-tvl">
                 <div className="pool-tvl-value">
-                  ${reserves ? (Number(formatUnits(reserves[0], 6)) + Number(formatUnits(reserves[1], 18)) * currentPrice).toFixed(0) : '0'}
+                  {formatUSD(poolTVL)}
                 </div>
                 <div className="pool-tvl-change">+2.4%</div>
               </div>
