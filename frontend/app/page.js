@@ -7,7 +7,7 @@ export default function Home() {
         <h1>
           DEXplorer
           <br />
-          <span>Next-Gen DEX</span>
+          <span>Lightning Fast</span>
         </h1>
         <p>
           Trade, earn, and build on the fastest decentralized exchange. 
@@ -45,9 +45,9 @@ export default function Home() {
           <p>Maximize your returns with automated liquidity mining rewards.</p>
         </div>
         <div className="feature-card">
-          <div className="feature-icon">🌐</div>
-          <h3>Cross-Chain</h3>
-          <p>Seamlessly bridge assets across multiple blockchain networks.</p>
+           <div className="feature-icon">🌐</div>
+           <h3>Cross-Chain Bridge</h3>
+           <p>Seamlessly bridge assets across multiple blockchain networks.</p>
         </div>
         <div className="feature-card">
           <div className="feature-icon">🎯</div>

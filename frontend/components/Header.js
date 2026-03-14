@@ -19,6 +19,9 @@ export default function Header() {
     setMounted(true);
   }, []);
 
+  // Return null during hydration to prevent mismatch
+  if (!mounted) return null;
+
   const formatAddress = (addr) => {
     if (!addr) return '';
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`;

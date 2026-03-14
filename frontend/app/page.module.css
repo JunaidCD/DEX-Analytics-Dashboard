@@ -1,13 +1,13 @@
 .page {
-  --background: #fafafa;
-  --foreground: #fff;
+  --background: #f0f9ff;
+  --foreground: #ffffff;
 
-  --text-primary: #000;
-  --text-secondary: #666;
+  --text-primary: #0c4a6e;
+  --text-secondary: #64748b;
 
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-  --button-secondary-border: #ebebeb;
+  --button-primary-hover: #0369a1;
+  --button-secondary-hover: #e2e8f0;
+  --button-secondary-border: #cbd5e1;
 
   display: flex;
   min-height: 100vh;
@@ -15,6 +15,20 @@
   justify-content: center;
   font-family: var(--font-geist-sans);
   background-color: var(--background);
+}
+
+.feature-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid #e2e8f0;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
 }
 
 .main {
