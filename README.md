@@ -1,6 +1,80 @@
 # DEXplorer
 
-DEX Analytics Dashboard with stablecoin on Polkadot Hub Testnet
+> A full-stack decentralized exchange (DEX) analytics dashboard built on Polkadot Hub Testnet, featuring real-time token swaps, liquidity management, and on-chain trade analytics.
+
+## Project Description
+
+**DEXplorer** is a comprehensive Web3 decentralized exchange platform that enables users to trade ERC-20 tokens, provide liquidity, and analyze on-chain trading activity — all through a sleek, modern dashboard interface. Built on the Polkadot Hub Testnet (Paseo-based EVM), it combines a custom AMM (Automated Market Maker) protocol with a feature-rich frontend to deliver a seamless DeFi experience.
+
+### Key Features
+
+- **Token Swapping** — Swap between ERC-20 tokens (USDC ↔ MTK) with real-time price quoting, slippage protection, and deadline-based transaction validation via the DEXRouter contract.
+- **Liquidity Provision** — Add and remove liquidity to trading pairs, earning fees from trades proportional to your pool share.
+- **Analytics Dashboard** — View live trade history, pool reserves, token prices, Total Value Locked (TVL), and impermanent loss calculations through an interactive data dashboard powered by charts and on-chain event indexing.
+- **Wallet Integration** — Connect via MetaMask (or any injected wallet) with automatic chain detection and network switching for Polkadot Hub Testnet.
+- **Responsive & Animated UI** — A premium, dark-themed interface with smooth micro-animations and glassmorphism design elements.
+
+---
+
+## Technical Description
+
+### Architecture
+
+DEXplorer follows a **monorepo** structure with two main modules:
+
+| Layer | Directory | Description |
+|-------|-----------|-------------|
+| **Frontend** | `frontend/` | Next.js web application serving the UI, wallet connectivity, and on-chain data queries |
+| **Backend / Smart Contracts** | `backend/` | Solidity smart contracts (AMM core) with Hardhat for compilation, testing, and deployment |
+
+### Frontend Stack
+
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| **Next.js** | 16.1.6 | React framework with App Router for server/client rendering and file-based routing |
+| **React** | 19.2.3 | UI component library with the latest React Compiler optimizations |
+| **wagmi** | 3.5.0 | React hooks for Ethereum — wallet connection, contract reads/writes, chain management |
+| **viem** | 2.47.0 | Low-level TypeScript interface for EVM interaction (ABI encoding, RPC calls, event parsing) |
+| **Recharts** | 3.7.0 | Composable charting library for rendering trade history, TVL, and price analytics |
+| **Framer Motion** | 12.36.0 | Animation library for smooth page transitions and micro-interactions |
+| **TanStack React Query** | 5.90.21 | Asynchronous state management for caching and refetching on-chain data |
+
+### Smart Contract Stack
+
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| **Solidity** | 0.8.24 | Smart contract programming language (with IR-based optimizer enabled) |
+| **Hardhat** | 2.28.6 | Development environment for compiling, testing, and deploying contracts |
+| **OpenZeppelin Contracts** | 5.6.1 | Battle-tested library for ERC-20 token standards and security utilities |
+
+### Core Smart Contracts
+
+| Contract | Description |
+|----------|-------------|
+| **DEXFactory** | Factory contract that creates and registers new trading pair pools |
+| **DEXPair** | Core AMM pair contract implementing the constant-product formula (`x * y = k`), handling reserves, minting/burning LP tokens, and emitting swap events |
+| **DEXRouter** | High-level router providing user-facing functions — `addLiquidity()`, `removeLiquidity()`, `swapExactTokensForTokens()` — with built-in slippage and deadline checks |
+| **MockUSDC / MockToken** | Test ERC-20 tokens (USDC and MTK) deployed for development and testnet usage |
+
+### Blockchain Network
+
+| Property | Value |
+|----------|-------|
+| **Network** | Polkadot Hub Testnet (Paseo-based EVM) |
+| **RPC URL** | `https://eth-rpc-testnet.polkadot.io` |
+| **Chain ID** | `420420417` |
+| **Native Token** | DOT |
+
+### Utility Modules
+
+The frontend includes dedicated utility modules for on-chain data processing:
+
+- **`calculatePrice.ts`** — Derives token prices from pool reserve ratios
+- **`calculateTVL.ts`** — Computes Total Value Locked across liquidity pools
+- **`calculateImpermanentLoss.ts`** — Estimates impermanent loss for liquidity providers based on price divergence
+- **`formatToken.ts`** — Formats raw token amounts (wei → human-readable) with decimal precision
+
+---
 
 ## Deployed Contracts (Polkadot Hub Testnet)
 
