@@ -1,0 +1,263 @@
+2026-03-15T03:55:47.562Z hardhat:core:vars:varsManager Creating a new instance of VarsManager
+2026-03-15T03:55:47.566Z hardhat:core:vars:varsManager Loading ENV variables if any
+2026-03-15T03:55:47.601Z hardhat:core:config Loading Hardhat config from C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\hardhat.config.js
+2026-03-15T03:55:48.728Z hardhat:core:hre Creating HardhatRuntimeEnvironment
+2026-03-15T03:55:48.734Z hardhat:core:global-dir Looking up Client Id at C:\Users\ASUS\AppData\Local\hardhat-nodejs\Data\analytics.json
+2026-03-15T03:55:48.736Z hardhat:core:global-dir Client Id found: 7cdcd8dc-dfe5-4a91-8347-eebc09453042
+2026-03-15T03:55:48.847Z hardhat:core:analytics Sending hit for task
+2026-03-15T03:55:48.847Z hardhat:core:analytics Hit payload: {"client_id":"7cdcd8dc-dfe5-4a91-8347-eebc09453042","user_id":"7cdcd8dc-dfe5-4a91-8347-eebc09453042","user_properties":{"projectId":{"value":"hardhat-project"},"userType":{"value":"Developer"},"hardhatVersion":{"value":"Hardhat 2.28.6"},"operatingSystem":{"value":"win32"},"nodeVersion":{"value":"v22.13.1"}},"events":[{"name":"task","params":{"engagement_time_msec":"10000","session_id":"0.33058086413805854"}}]}
+2026-03-15T03:55:48.941Z hardhat:core:hre Running task test
+2026-03-15T03:55:48.943Z hardhat:core:hre Running task compile
+2026-03-15T03:55:48.943Z hardhat:core:hre Running compile's super
+2026-03-15T03:55:48.944Z hardhat:core:hre Running task compile:get-compilation-tasks
+2026-03-15T03:55:48.944Z hardhat:core:hre Running task compile:solidity
+2026-03-15T03:55:48.944Z hardhat:core:hre Running task compile:solidity:get-source-paths
+2026-03-15T03:55:48.947Z hardhat:core:hre Running task compile:solidity:get-source-names
+2026-03-15T03:55:48.953Z hardhat:core:hre Running task compile:solidity:get-dependency-graph
+2026-03-15T03:55:48.953Z hardhat:core:hre Running task compile:solidity:get-remappings
+2026-03-15T03:55:48.956Z hardhat:core:hre Running task compile:solidity:read-file
+2026-03-15T03:55:48.956Z hardhat:core:hre Running task compile:solidity:read-file
+2026-03-15T03:55:48.957Z hardhat:core:hre Running task compile:solidity:read-file
+2026-03-15T03:55:48.957Z hardhat:core:hre Running task compile:solidity:read-file
+2026-03-15T03:55:48.957Z hardhat:core:hre Running task compile:solidity:read-file
+2026-03-15T03:55:48.957Z hardhat:core:hre Running task compile:solidity:read-file
+2026-03-15T03:55:48.962Z hardhat:core:hre Running task compile:solidity:transform-import-name
+2026-03-15T03:55:48.962Z hardhat:core:hre Running task compile:solidity:transform-import-name
+2026-03-15T03:55:48.962Z hardhat:core:hre Running task compile:solidity:transform-import-name
+2026-03-15T03:55:48.963Z hardhat:core:hre Running task compile:solidity:transform-import-name
+2026-03-15T03:55:48.963Z hardhat:core:hre Running task compile:solidity:transform-import-name
+2026-03-15T03:55:48.963Z hardhat:core:hre Running task compile:solidity:transform-import-name
+2026-03-15T03:55:48.963Z hardhat:core:hre Running task compile:solidity:transform-import-name
+2026-03-15T03:55:48.963Z hardhat:core:hre Running task compile:solidity:transform-import-name
+2026-03-15T03:55:48.963Z hardhat:core:hre Running task compile:solidity:transform-import-name
+2026-03-15T03:55:48.963Z hardhat:core:hre Running task compile:solidity:transform-import-name
+2026-03-15T03:55:48.963Z hardhat:core:hre Running task compile:solidity:transform-import-name
+2026-03-15T03:55:48.963Z hardhat:core:hre Running task compile:solidity:transform-import-name
+2026-03-15T03:55:48.963Z hardhat:core:hre Running task compile:solidity:transform-import-name
+2026-03-15T03:55:48.963Z hardhat:core:hre Running task compile:solidity:transform-import-name
+2026-03-15T03:55:49.029Z hardhat:core:hre Running task compile:solidity:read-file
+2026-03-15T03:55:49.029Z hardhat:core:hre Running task compile:solidity:read-file
+2026-03-15T03:55:49.030Z hardhat:core:hre Running task compile:solidity:read-file
+2026-03-15T03:55:49.030Z hardhat:core:hre Running task compile:solidity:read-file
+2026-03-15T03:55:49.030Z hardhat:core:hre Running task compile:solidity:read-file
+2026-03-15T03:55:49.030Z hardhat:core:hre Running task compile:solidity:read-file
+2026-03-15T03:55:49.030Z hardhat:core:hre Running task compile:solidity:read-file
+2026-03-15T03:55:49.031Z hardhat:core:hre Running task compile:solidity:read-file
+2026-03-15T03:55:49.031Z hardhat:core:hre Running task compile:solidity:read-file
+2026-03-15T03:55:49.031Z hardhat:core:hre Running task compile:solidity:read-file
+2026-03-15T03:55:49.031Z hardhat:core:hre Running task compile:solidity:read-file
+2026-03-15T03:55:49.033Z hardhat:core:hre Running task compile:solidity:transform-import-name
+2026-03-15T03:55:49.034Z hardhat:core:hre Running task compile:solidity:transform-import-name
+2026-03-15T03:55:49.037Z hardhat:core:hre Running task compile:solidity:transform-import-name
+2026-03-15T03:55:49.037Z hardhat:core:hre Running task compile:solidity:transform-import-name
+2026-03-15T03:55:49.037Z hardhat:core:hre Running task compile:solidity:transform-import-name
+2026-03-15T03:55:49.037Z hardhat:core:hre Running task compile:solidity:transform-import-name
+2026-03-15T03:55:49.048Z hardhat:core:hre Running task compile:solidity:read-file
+2026-03-15T03:55:49.049Z hardhat:core:hre Running task compile:solidity:read-file
+2026-03-15T03:55:49.049Z hardhat:core:hre Running task compile:solidity:read-file
+2026-03-15T03:55:49.051Z hardhat:core:hre Running task compile:solidity:read-file
+2026-03-15T03:55:49.052Z hardhat:core:hre Running task compile:solidity:read-file
+2026-03-15T03:55:49.053Z hardhat:core:hre Running task compile:solidity:transform-import-name
+2026-03-15T03:55:49.058Z hardhat:core:hre Running task compile:solidity:get-compilation-jobs
+2026-03-15T03:55:49.059Z hardhat:core:tasks:compile The dependency graph was divided in '1' connected components
+2026-03-15T03:55:49.060Z hardhat:core:hre Running task compile:solidity:get-compilation-job-for-file
+2026-03-15T03:55:49.060Z hardhat:core:hre Running compile:solidity:get-compilation-job-for-file's super
+2026-03-15T03:55:49.062Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXFactory.sol' will be compiled with version '0.8.24'
+2026-03-15T03:55:49.062Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXPair.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXFactory.sol'
+2026-03-15T03:55:49.062Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\access\Ownable.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXFactory.sol'
+2026-03-15T03:55:49.062Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\utils\ReentrancyGuard.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXFactory.sol'
+2026-03-15T03:55:49.062Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\IERC20.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXFactory.sol'
+2026-03-15T03:55:49.062Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\ERC20.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXFactory.sol'
+2026-03-15T03:55:49.062Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\utils\StorageSlot.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXFactory.sol'
+2026-03-15T03:55:49.062Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\IERC20.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXFactory.sol'
+2026-03-15T03:55:49.062Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\utils\Context.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXFactory.sol'
+2026-03-15T03:55:49.062Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\interfaces\draft-IERC6093.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXFactory.sol'
+2026-03-15T03:55:49.062Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\extensions\IERC20Metadata.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXFactory.sol'
+2026-03-15T03:55:49.062Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\IERC20.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXFactory.sol'
+2026-03-15T03:55:49.062Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\utils\Context.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXFactory.sol'
+2026-03-15T03:55:49.062Z hardhat:core:hre Running task compile:solidity:get-compilation-job-for-file
+2026-03-15T03:55:49.063Z hardhat:core:hre Running compile:solidity:get-compilation-job-for-file's super
+2026-03-15T03:55:49.063Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXRouter.sol' will be compiled with version '0.8.24'
+2026-03-15T03:55:49.063Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXFactory.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXRouter.sol'
+2026-03-15T03:55:49.063Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXPair.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXRouter.sol'
+2026-03-15T03:55:49.063Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\utils\ReentrancyGuard.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXRouter.sol'
+2026-03-15T03:55:49.063Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\IERC20.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXRouter.sol'
+2026-03-15T03:55:49.063Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXPair.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXRouter.sol'
+2026-03-15T03:55:49.063Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\access\Ownable.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXRouter.sol'
+2026-03-15T03:55:49.063Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\utils\ReentrancyGuard.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXRouter.sol'
+2026-03-15T03:55:49.063Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\IERC20.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXRouter.sol'
+2026-03-15T03:55:49.063Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\ERC20.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXRouter.sol'
+2026-03-15T03:55:49.063Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\utils\StorageSlot.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXRouter.sol'
+2026-03-15T03:55:49.063Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\IERC20.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXRouter.sol'
+2026-03-15T03:55:49.063Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\utils\Context.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXRouter.sol'
+2026-03-15T03:55:49.063Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\interfaces\draft-IERC6093.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXRouter.sol'
+2026-03-15T03:55:49.063Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\extensions\IERC20Metadata.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXRouter.sol'
+2026-03-15T03:55:49.063Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\IERC20.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXRouter.sol'
+2026-03-15T03:55:49.063Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\utils\Context.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXRouter.sol'
+2026-03-15T03:55:49.063Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\utils\StorageSlot.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXRouter.sol'
+2026-03-15T03:55:49.064Z hardhat:core:hre Running task compile:solidity:get-compilation-job-for-file
+2026-03-15T03:55:49.064Z hardhat:core:hre Running compile:solidity:get-compilation-job-for-file's super
+2026-03-15T03:55:49.064Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\IERC20.sol' will be compiled with version '0.8.24'
+2026-03-15T03:55:49.064Z hardhat:core:hre Running task compile:solidity:get-compilation-job-for-file
+2026-03-15T03:55:49.064Z hardhat:core:hre Running compile:solidity:get-compilation-job-for-file's super
+2026-03-15T03:55:49.064Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\extensions\IERC20Metadata.sol' will be compiled with version '0.8.24'
+2026-03-15T03:55:49.064Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\IERC20.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\extensions\IERC20Metadata.sol'
+2026-03-15T03:55:49.064Z hardhat:core:hre Running task compile:solidity:get-compilation-job-for-file
+2026-03-15T03:55:49.064Z hardhat:core:hre Running compile:solidity:get-compilation-job-for-file's super
+2026-03-15T03:55:49.065Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\ERC20.sol' will be compiled with version '0.8.24'
+2026-03-15T03:55:49.065Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\IERC20.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\ERC20.sol'
+2026-03-15T03:55:49.065Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\utils\Context.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\ERC20.sol'
+2026-03-15T03:55:49.065Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\interfaces\draft-IERC6093.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\ERC20.sol'
+2026-03-15T03:55:49.065Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\extensions\IERC20Metadata.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\ERC20.sol'
+2026-03-15T03:55:49.065Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\IERC20.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\ERC20.sol'
+2026-03-15T03:55:49.065Z hardhat:core:hre Running task compile:solidity:get-compilation-job-for-file
+2026-03-15T03:55:49.065Z hardhat:core:hre Running compile:solidity:get-compilation-job-for-file's super
+2026-03-15T03:55:49.065Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\interfaces\draft-IERC6093.sol' will be compiled with version '0.8.24'
+2026-03-15T03:55:49.065Z hardhat:core:hre Running task compile:solidity:get-compilation-job-for-file
+2026-03-15T03:55:49.066Z hardhat:core:hre Running compile:solidity:get-compilation-job-for-file's super
+2026-03-15T03:55:49.066Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\utils\Context.sol' will be compiled with version '0.8.24'
+2026-03-15T03:55:49.066Z hardhat:core:hre Running task compile:solidity:get-compilation-job-for-file
+2026-03-15T03:55:49.066Z hardhat:core:hre Running compile:solidity:get-compilation-job-for-file's super
+2026-03-15T03:55:49.066Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\access\Ownable.sol' will be compiled with version '0.8.24'
+2026-03-15T03:55:49.066Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\utils\Context.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\access\Ownable.sol'
+2026-03-15T03:55:49.066Z hardhat:core:hre Running task compile:solidity:get-compilation-job-for-file
+2026-03-15T03:55:49.066Z hardhat:core:hre Running compile:solidity:get-compilation-job-for-file's super
+2026-03-15T03:55:49.067Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\MockUSDC.sol' will be compiled with version '0.8.24'
+2026-03-15T03:55:49.067Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\access\Ownable.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\MockUSDC.sol'
+2026-03-15T03:55:49.067Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\ERC20.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\MockUSDC.sol'
+2026-03-15T03:55:49.067Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\utils\Context.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\MockUSDC.sol'
+2026-03-15T03:55:49.067Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\IERC20.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\MockUSDC.sol'
+2026-03-15T03:55:49.067Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\utils\Context.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\MockUSDC.sol'
+2026-03-15T03:55:49.067Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\interfaces\draft-IERC6093.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\MockUSDC.sol'
+2026-03-15T03:55:49.067Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\extensions\IERC20Metadata.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\MockUSDC.sol'
+2026-03-15T03:55:49.067Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\IERC20.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\MockUSDC.sol'
+2026-03-15T03:55:49.067Z hardhat:core:hre Running task compile:solidity:get-compilation-job-for-file
+2026-03-15T03:55:49.067Z hardhat:core:hre Running compile:solidity:get-compilation-job-for-file's super
+2026-03-15T03:55:49.067Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\MockToken.sol' will be compiled with version '0.8.24'
+2026-03-15T03:55:49.068Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\access\Ownable.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\MockToken.sol'
+2026-03-15T03:55:49.068Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\ERC20.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\MockToken.sol'
+2026-03-15T03:55:49.068Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\utils\Context.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\MockToken.sol'
+2026-03-15T03:55:49.068Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\IERC20.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\MockToken.sol'
+2026-03-15T03:55:49.068Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\utils\Context.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\MockToken.sol'
+2026-03-15T03:55:49.068Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\interfaces\draft-IERC6093.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\MockToken.sol'
+2026-03-15T03:55:49.068Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\extensions\IERC20Metadata.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\MockToken.sol'
+2026-03-15T03:55:49.068Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\IERC20.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\MockToken.sol'
+2026-03-15T03:55:49.068Z hardhat:core:hre Running task compile:solidity:get-compilation-job-for-file
+2026-03-15T03:55:49.068Z hardhat:core:hre Running compile:solidity:get-compilation-job-for-file's super
+2026-03-15T03:55:49.068Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\Lock.sol' will be compiled with version '0.8.24'
+2026-03-15T03:55:49.068Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\ERC20.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\Lock.sol'
+2026-03-15T03:55:49.068Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\IERC20.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\Lock.sol'
+2026-03-15T03:55:49.068Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\utils\Context.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\Lock.sol'
+2026-03-15T03:55:49.068Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\interfaces\draft-IERC6093.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\Lock.sol'
+2026-03-15T03:55:49.068Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\extensions\IERC20Metadata.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\Lock.sol'
+2026-03-15T03:55:49.068Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\IERC20.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\Lock.sol'
+2026-03-15T03:55:49.068Z hardhat:core:hre Running task compile:solidity:get-compilation-job-for-file
+2026-03-15T03:55:49.068Z hardhat:core:hre Running compile:solidity:get-compilation-job-for-file's super
+2026-03-15T03:55:49.069Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXPair.sol' will be compiled with version '0.8.24'
+2026-03-15T03:55:49.069Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\utils\ReentrancyGuard.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXPair.sol'
+2026-03-15T03:55:49.069Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\IERC20.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXPair.sol'
+2026-03-15T03:55:49.069Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\ERC20.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXPair.sol'
+2026-03-15T03:55:49.069Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\utils\StorageSlot.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXPair.sol'
+2026-03-15T03:55:49.069Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\IERC20.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXPair.sol'
+2026-03-15T03:55:49.069Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\utils\Context.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXPair.sol'
+2026-03-15T03:55:49.069Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\interfaces\draft-IERC6093.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXPair.sol'
+2026-03-15T03:55:49.069Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\extensions\IERC20Metadata.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXPair.sol'
+2026-03-15T03:55:49.069Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\token\ERC20\IERC20.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\contracts\DEXPair.sol'
+2026-03-15T03:55:49.069Z hardhat:core:hre Running task compile:solidity:get-compilation-job-for-file
+2026-03-15T03:55:49.069Z hardhat:core:hre Running compile:solidity:get-compilation-job-for-file's super
+2026-03-15T03:55:49.069Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\utils\ReentrancyGuard.sol' will be compiled with version '0.8.24'
+2026-03-15T03:55:49.069Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\utils\StorageSlot.sol' added as dependency of 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\utils\ReentrancyGuard.sol'
+2026-03-15T03:55:49.070Z hardhat:core:hre Running task compile:solidity:get-compilation-job-for-file
+2026-03-15T03:55:49.070Z hardhat:core:hre Running compile:solidity:get-compilation-job-for-file's super
+2026-03-15T03:55:49.070Z hardhat:core:compilation-job File 'C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend\node_modules\@openzeppelin\contracts\utils\StorageSlot.sol' will be compiled with version '0.8.24'
+2026-03-15T03:55:49.071Z hardhat:core:hre Running task compile:solidity:handle-compilation-jobs-failures
+2026-03-15T03:55:49.071Z hardhat:core:hre Running task compile:solidity:filter-compilation-jobs
+2026-03-15T03:55:49.075Z hardhat:core:tasks:compile '14' jobs were filtered out
+2026-03-15T03:55:49.075Z hardhat:core:hre Running task compile:solidity:merge-compilation-jobs
+2026-03-15T03:55:49.075Z hardhat:core:hre Running task compile:solidity:compile-jobs
+2026-03-15T03:55:49.075Z hardhat:core:hre Running compile:solidity:compile-jobs's super
+2026-03-15T03:55:49.075Z hardhat:core:tasks:compile No compilation jobs to compile
+2026-03-15T03:55:49.075Z hardhat:core:hre Running task compile:solidity:log:nothing-to-compile
+2026-03-15T03:55:49.076Z hardhat:core:hre Running task typechain:generate-types
+2026-03-15T03:55:49.080Z hardhat:core:hre Running task compile:solidity:log:compilation-result
+2026-03-15T03:55:49.080Z hardhat:core:hre Running task compile:remove-obsolete-artifacts
+2026-03-15T03:55:49.096Z hardhat:core:hre Running task test:get-test-files
+2026-03-15T03:55:49.097Z hardhat:core:hre Running task test:setup-test-environment
+2026-03-15T03:55:49.098Z hardhat:core:hre Running task test:show-fork-recommendations
+2026-03-15T03:55:49.098Z hardhat:core:hre Running task test:run-mocha-tests
+2026-03-15T03:55:49.098Z hardhat:core:hre Running test:run-mocha-tests's super
+
+
+  DEX Factory and Pair
+    Factory
+2026-03-15T03:55:49.223Z hardhat:core:hre Creating provider for network hardhat
+2026-03-15T03:55:49.737Z hardhat:core:hardhat-network:provider Making tracing config
+2026-03-15T03:55:49.743Z hardhat:core:analytics Hit for task sent successfully
+2026-03-15T03:55:49.745Z hardhat:core:hardhat-network:provider Creating EDR provider
+2026-03-15T03:55:49.839Z hardhat:core:hardhat-network:provider EDR provider created
+      ✔ should create a pair
+      ✔ should return correct pair address
+      ✔ should track all pairs
+    Pair - Liquidity
+      ✔ should add liquidity
+      ✔ should get correct reserves after adding liquidity
+    Pair - Swap
+      ✔ should get amount out correctly
+
+  DEX Edge Cases and Coverage
+    Mock Tokens
+      ✔ should test MockUSDC decimals and faucet
+      ✔ should test MockToken faucet
+    DEXRouter Edge Cases
+      ✔ should revert on expired deadline
+      ✔ should revert on invalid path
+      ✔ should revert if pair not exists
+      ✔ should handle optimal amount checks in addLiquidity
+      1) should complete multi-hop swap
+      ✔ should prevent slippage in swap
+    DEXPair Edge Cases
+      ✔ should revert if non-factory initializes
+      ✔ should fail getAmountOut with zero inputs
+    DEXFactory Edge Cases
+      ✔ should not create pair for identical addresses
+      ✔ should not create pair with zero address
+      ✔ should not recreate same pair
+
+  DEXRouter - Full Flow
+    Add Liquidity
+      ✔ should add liquidity via router
+    Remove Liquidity
+      ✔ should remove liquidity via router
+    End-to-End Flow
+=== End-to-End Test Results ===
+LP Tokens Received: 499999999999000
+Reserves - Token0 (USDC): 500000000000000000000
+Reserves - Token1 (MTK): 500000000
+      ✔ should add liquidity and check reserves
+
+  DEXToken
+    ✔ should have correct name and symbol
+    ✔ should mint initial supply to deployer
+    ✔ should transfer correctly
+
+
+  24 passing (2s)
+  1 failing
+
+  1) DEX Edge Cases and Coverage
+       DEXRouter Edge Cases
+         should complete multi-hop swap:
+     Error: VM Exception while processing transaction: reverted with reason string 'DEX: K'
+    at DEXPair.swap (contracts/DEXPair.sol:196)
+    at DEXRouter._swap (contracts/DEXRouter.sol:274)
+    at EdrProviderWrapper.request (node_modules\hardhat\src\internal\hardhat-network\provider\provider.ts:453:41)
+    at HardhatEthersSigner.sendTransaction (node_modules\@nomicfoundation\hardhat-ethers\src\signers.ts:185:18)
+    at send (node_modules\ethers\src.ts\contract\contract.ts:313:20)
+    at Proxy.swapExactTokensForTokens (node_modules\ethers\src.ts\contract\contract.ts:352:16)
+    at waitForPendingTransaction (node_modules\@nomicfoundation\hardhat-chai-matchers\src\internal\emit.ts:28:17)
+    at Context.<anonymous> (test\DEXEdgeCases.test.js:149:7)
+  
+
+
+
+2026-03-15T03:55:51.291Z hardhat:core:cli Killing Hardhat after successfully running task test

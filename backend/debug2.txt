@@ -1,0 +1,26 @@
+
+
+  DEX Edge Cases and Coverage
+    DEXRouter Edge Cases
+      1) should complete multi-hop swap
+
+
+  0 passing (827ms)
+  1 failing
+
+  1) DEX Edge Cases and Coverage
+       DEXRouter Edge Cases
+         should complete multi-hop swap:
+     Error: VM Exception while processing transaction: reverted with reason string 'DEX: K'
+    at DEXPair.swap (contracts/DEXPair.sol:196)
+    at DEXRouter._swap (contracts/DEXRouter.sol:274)
+    at EdrProviderWrapper.request (node_modules\hardhat\src\internal\hardhat-network\provider\provider.ts:453:41)
+    at HardhatEthersSigner.sendTransaction (node_modules\@nomicfoundation\hardhat-ethers\src\signers.ts:185:18)
+    at send (node_modules\ethers\src.ts\contract\contract.ts:313:20)
+    at Proxy.swapExactTokensForTokens (node_modules\ethers\src.ts\contract\contract.ts:352:16)
+    at waitForPendingTransaction (node_modules\@nomicfoundation\hardhat-chai-matchers\src\internal\emit.ts:28:17)
+    at Context.<anonymous> (test\DEXEdgeCases.test.js:149:7)
+  
+
+
+

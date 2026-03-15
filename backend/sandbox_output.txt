@@ -1,0 +1,23 @@
+
+
+  Debug Sandbox
+Pair1 address: 0x5c3416F08055B5Aa2eA41b276B2fDf3fdF09754f
+Pair2 address: 0x2B1617d3F71ec3c06EaCD98938b35C4132127Ccc
+MockToken address: 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512
+Pair1 MTK balance before: 1000000n
+DEX K FAILED!
+amount0In: 1000
+amount1In: 996
+amount0Out: 0
+amount1Out: 996
+balance0: 1001000
+balance1: 1000000
+reserve0: 1000000
+reserve1: 1000000
+Swap failed: VM Exception while processing transaction: reverted with reason string 'DEX: K'
+Pair1 MTK balance after: 1000000n
+    ✔ should trace multihop swap (797ms)
+
+
+  1 passing (800ms)
+

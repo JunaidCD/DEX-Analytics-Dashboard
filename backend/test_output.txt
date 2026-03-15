@@ -1,0 +1,87 @@
+
+
+  DEX Factory and Pair
+    Factory
+      ✔ should create a pair
+      ✔ should return correct pair address
+      ✔ should track all pairs
+    Pair - Liquidity
+      ✔ should add liquidity
+      ✔ should get correct reserves after adding liquidity
+    Pair - Swap
+      ✔ should get amount out correctly
+
+  DEX Edge Cases and Coverage
+    Mock Tokens
+      ✔ should test MockUSDC decimals and faucet
+      ✔ should test MockToken faucet
+    DEXRouter Edge Cases
+      ✔ should revert on expired deadline
+      ✔ should revert on invalid path
+      ✔ should revert if pair not exists
+      ✔ should handle optimal amount checks in addLiquidity
+      1) should complete multi-hop swap
+      ✔ should prevent slippage in swap
+    DEXPair Edge Cases
+      ✔ should revert if non-factory initializes
+      ✔ should fail getAmountOut with zero inputs
+    DEXFactory Edge Cases
+      2) should not create pair for identical addresses
+      3) should not create pair with zero address
+      4) should not recreate same pair
+
+  DEXRouter - Full Flow
+    Add Liquidity
+      ✔ should add liquidity via router
+    Remove Liquidity
+      ✔ should remove liquidity via router
+    End-to-End Flow
+=== End-to-End Test Results ===
+LP Tokens Received: 499999999999000
+Reserves - Token0 (USDC): 500000000000000000000
+Reserves - Token1 (MTK): 500000000
+      ✔ should add liquidity and check reserves
+
+  DEXToken
+    ✔ should have correct name and symbol
+    ✔ should mint initial supply to deployer
+    ✔ should transfer correctly
+
+
+  21 passing (2s)
+  4 failing
+
+  1) DEX Edge Cases and Coverage
+       DEXRouter Edge Cases
+         should complete multi-hop swap:
+     Error: VM Exception while processing transaction: reverted with panic code 0x11 (Arithmetic operation overflowed outside of an unchecked block)
+    at DEXPair.swap (contracts/DEXPair.sol:210)
+    at DEXRouter._swap (contracts/DEXRouter.sol:274)
+    at EdrProviderWrapper.request (node_modules\hardhat\src\internal\hardhat-network\provider\provider.ts:453:41)
+    at HardhatEthersSigner.sendTransaction (node_modules\@nomicfoundation\hardhat-ethers\src\signers.ts:185:18)
+    at send (node_modules\ethers\src.ts\contract\contract.ts:313:20)
+    at Proxy.swapExactTokensForTokens (node_modules\ethers\src.ts\contract\contract.ts:352:16)
+    at waitForPendingTransaction (node_modules\@nomicfoundation\hardhat-chai-matchers\src\internal\emit.ts:28:17)
+    at Context.<anonymous> (test\DEXEdgeCases.test.js:149:7)
+  
+
+  2) DEX Edge Cases and Coverage
+       DEXFactory Edge Cases
+         should not create pair for identical addresses:
+     AssertionError: Expected transaction to be reverted with reason 'DEXFactory: IDENTICAL_ADDRESSES', but it reverted with reason 'DEX: IDENTICAL_ADDRESSES'
+      at Context.<anonymous> (test\DEXEdgeCases.test.js:180:7)
+
+  3) DEX Edge Cases and Coverage
+       DEXFactory Edge Cases
+         should not create pair with zero address:
+     AssertionError: Expected transaction to be reverted with reason 'DEXFactory: ZERO_ADDRESS', but it reverted with reason 'DEX: ZERO_ADDRESS'
+      at Context.<anonymous> (test\DEXEdgeCases.test.js:184:7)
+
+  4) DEX Edge Cases and Coverage
+       DEXFactory Edge Cases
+         should not recreate same pair:
+     AssertionError: Expected transaction to be reverted with reason 'DEXFactory: PAIR_EXISTS', but it reverted with reason 'DEX: PAIR_EXISTS'
+      at Context.<anonymous> (test\DEXEdgeCases.test.js:188:7)
+
+
+

@@ -1,0 +1,68 @@
+[1m[33mWarning:[39m[22m Unused function parameter. Remove or comment out the variable name to silence this warning.
+   --> contracts/DEXPair.sol:197:71:
+    |
+197 |     function swap(uint256 amount0Out, uint256 amount1Out, address to, bytes calldata data) external nonReentrant lock {
+    |                                                                       ^^^^^^^^^^^^^^^^^^^
+
+
+Compiled 3 Solidity files successfully (evm target: paris).
+
+
+  DEX Factory and Pair
+    Factory
+      ✔ should create a pair
+      ✔ should return correct pair address
+      ✔ should track all pairs
+    Pair - Liquidity
+      ✔ should add liquidity
+      ✔ should get correct reserves after adding liquidity
+    Pair - Swap
+      ✔ should get amount out correctly
+
+  DEX Edge Cases and Coverage
+    Mock Tokens
+      ✔ should test MockUSDC decimals and faucet
+      ✔ should test MockToken faucet
+    DEXRouter Edge Cases
+      ✔ should revert on expired deadline
+      ✔ should revert on invalid path
+      ✔ should revert if pair not exists
+      ✔ should handle optimal amount checks in addLiquidity
+      ✔ should complete multi-hop swap
+      ✔ should prevent slippage in swap
+    DEXPair Edge Cases
+      ✔ should revert if non-factory initializes
+      ✔ should fail getAmountOut with zero inputs
+    DEXFactory Edge Cases
+      ✔ should not create pair for identical addresses
+      ✔ should not create pair with zero address
+      ✔ should not recreate same pair
+
+  DEXRouter - Full Flow
+    Add Liquidity
+      ✔ should add liquidity via router
+    Remove Liquidity
+      ✔ should remove liquidity via router
+    End-to-End Flow
+=== End-to-End Test Results ===
+LP Tokens Received: 499999999999000
+Reserves - Token0 (USDC): 500000000000000000000
+Reserves - Token1 (MTK): 500000000
+      ✔ should add liquidity and check reserves
+
+  DEXToken
+    ✔ should have correct name and symbol
+    ✔ should mint initial supply to deployer
+    ✔ should transfer correctly
+
+  Debug Sandbox
+Pair1 address: 0xd7a7B7AF7fDb467dB2a67e470175A0C12E02061D
+Pair2 address: 0x5b97271Cb2f518FA23800adB6EBf5856cd577E5a
+MockToken address: 0xe70f935c32dA4dB13e7876795f1e175465e6458e
+Pair1 MTK balance before: 1000000n
+Pair1 MTK balance after: 999004n
+    ✔ should trace multihop swap (91ms)
+
+
+  26 passing (3s)
+

@@ -206,23 +206,20 @@ contract DEXPair is ERC20, ReentrancyGuard {
             require(to != token0 && to != token1, 'DEX: INVALID_TO');
             if (amount0Out > 0) _safeTransfer(token0, to, amount0Out);
             if (amount1Out > 0) _safeTransfer(token1, to, amount1Out);
-            amount0In = IERC20(token0).balanceOf(address(this)) - _reserve0;
-            amount1In = IERC20(token1).balanceOf(address(this)) - _reserve1;
+            balance0 = IERC20(token0).balanceOf(address(this));
+            balance1 = IERC20(token1).balanceOf(address(this));
+            amount0In = balance0 > _reserve0 - amount0Out ? balance0 - (_reserve0 - amount0Out) : 0;
+            amount1In = balance1 > _reserve1 - amount1Out ? balance1 - (_reserve1 - amount1Out) : 0;
             require(amount0In > 0 || amount1In > 0, 'DEX: INSUFFICIENT_INPUT_AMOUNT');
             {
                 uint256 balance0Adjusted;
                 uint256 balance1Adjusted;
                 unchecked {
-                    balance0Adjusted = amount0In * 1000 - amount0In * 3;
-                    balance1Adjusted = amount1In * 1000 - amount1In * 3;
-                }
-                // Wrap K check in unchecked to prevent overflow
-                unchecked {
+                    balance0Adjusted = balance0 * 1000 - amount0In * 3;
+                    balance1Adjusted = balance1 * 1000 - amount1In * 3;
                     require(balance0Adjusted * balance1Adjusted >= uint256(_reserve0) * uint256(_reserve1) * 1000000, 'DEX: K');
                 }
             }
-            balance0 = IERC20(token0).balanceOf(address(this));
-            balance1 = IERC20(token1).balanceOf(address(this));
         }
         _update(balance0, balance1, _reserve0, _reserve1);
         emit Swap(msg.sender, amount0In, amount1In, amount0Out, amount1Out, to);

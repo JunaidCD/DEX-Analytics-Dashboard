@@ -1,0 +1,100 @@
+
+Version
+=======
+> solidity-coverage: v0.8.17
+
+Instrumenting for coverage...
+=============================
+
+> DEXFactory.sol
+> DEXPair.sol
+> DEXRouter.sol
+> Lock.sol
+> MockToken.sol
+> MockUSDC.sol
+
+Compilation:
+============
+
+Compiled 15 Solidity files successfully (evm target: paris).
+
+Network Info
+============
+> HardhatEVM: v2.28.6
+> network:    hardhat
+
+
+
+  DEX Factory and Pair
+    Factory
+      ✔ should create a pair
+      ✔ should return correct pair address
+      ✔ should track all pairs
+    Pair - Liquidity
+      ✔ should add liquidity (110ms)
+      ✔ should get correct reserves after adding liquidity (93ms)
+    Pair - Swap
+      ✔ should get amount out correctly
+
+  DEX Edge Cases and Coverage
+    Mock Tokens
+      ✔ should test MockUSDC decimals and faucet
+      ✔ should test MockToken faucet
+    DEXRouter Edge Cases
+      ✔ should revert on expired deadline
+      ✔ should revert on invalid path
+      ✔ should revert if pair not exists
+      ✔ should handle optimal amount checks in addLiquidity (151ms)
+      ✔ should complete multi-hop swap (296ms)
+      ✔ should prevent slippage in swap (98ms)
+    DEXPair Edge Cases
+      ✔ should revert if non-factory initializes
+      ✔ should fail getAmountOut with zero inputs
+    DEXFactory Edge Cases
+      ✔ should not create pair for identical addresses
+      ✔ should not create pair with zero address
+      ✔ should not recreate same pair
+
+  DEXRouter - Full Flow
+    Add Liquidity
+      ✔ should add liquidity via router (92ms)
+    Remove Liquidity
+      ✔ should remove liquidity via router (65ms)
+    End-to-End Flow
+=== End-to-End Test Results ===
+LP Tokens Received: 499999999999000
+Reserves - Token0 (USDC): 500000000000000000000
+Reserves - Token1 (MTK): 500000000
+      ✔ should add liquidity and check reserves (115ms)
+
+  DEXToken
+    ✔ should have correct name and symbol
+    ✔ should mint initial supply to deployer
+    ✔ should transfer correctly
+
+  Debug Sandbox
+Pair1 address: 0x03193e5b2F697665e56c2AFD7FEEF6bbcA4E225e
+Pair2 address: 0xd077bC55f0A183A11d3770FC910426027c75660b
+MockToken address: 0xe70f935c32dA4dB13e7876795f1e175465e6458e
+Pair1 MTK balance before: 1000000n
+Pair1 MTK balance after: 999004n
+    ✔ should trace multihop swap (428ms)
+
+
+  26 passing (5s)
+
+-----------------|----------|----------|----------|----------|----------------|
+File             |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
+-----------------|----------|----------|----------|----------|----------------|
+ contracts\      |    98.51 |     70.9 |    96.97 |    95.26 |                |
+  DEXFactory.sol |      100 |      100 |      100 |      100 |                |
+  DEXPair.sol    |      100 |    68.97 |      100 |      100 |                |
+  DEXRouter.sol  |    96.67 |    70.31 |       90 |    89.02 |... 203,210,211 |
+  Lock.sol       |      100 |      100 |      100 |      100 |                |
+  MockToken.sol  |      100 |       50 |      100 |      100 |                |
+  MockUSDC.sol   |      100 |       50 |      100 |      100 |                |
+-----------------|----------|----------|----------|----------|----------------|
+All files        |    98.51 |     70.9 |    96.97 |    95.26 |                |
+-----------------|----------|----------|----------|----------|----------------|
+
+> Istanbul reports written to ./coverage/ and ./coverage.json

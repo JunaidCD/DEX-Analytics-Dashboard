@@ -1,0 +1,142 @@
+﻿
+
+  DEX Factory and Pair
+    Factory ΓÇô Deployment
+      Γ£ö should set the correct owner
+      Γ£ö should start with zero pairs
+    Factory ΓÇô createPair
+      Γ£ö should create a pair and emit PairCreated
+      Γ£ö should create a pair and return a non-zero address
+      Γ£ö should return the same pair regardless of token order
+      Γ£ö should track all pairs and return correct length
+      Γ£ö should store pair in allPairs array at correct index
+      Γ£ö should revert when creating a pair with identical addresses
+      Γ£ö should revert when creating a pair with zero address
+      Γ£ö should revert when creating a duplicate pair
+      Γ£ö should revert when creating a duplicate pair with reversed order
+      Γ£ö should allow creating multiple distinct pairs
+    Pair ΓÇô Initialization
+      Γ£ö should set the factory address
+      Γ£ö should set token0 and token1 correctly (sorted)
+      Γ£ö should have zero reserves initially
+      Γ£ö should have LP token name and symbol
+      Γ£ö should have zero total supply initially
+      Γ£ö should revert initialize if called by non-factory
+    Pair ΓÇô Add Liquidity (mint)
+      Γ£ö should add initial liquidity and mint LP tokens
+      Γ£ö should burn MINIMUM_LIQUIDITY to dead address on first mint
+      Γ£ö should emit Mint and Sync events
+      Γ£ö should update reserves after adding liquidity
+      Γ£ö should allow a second LP to add liquidity
+      Γ£ö should handle asymmetric liquidity (second LP gets min ratio)
+    Pair ΓÇô Remove Liquidity (burn)
+      Γ£ö should remove liquidity and return tokens
+      Γ£ö should emit Burn and Sync events
+      Γ£ö should not return all tokens (MINIMUM_LIQUIDITY locked)
+      Γ£ö should revert when burning zero liquidity
+      Γ£ö should remove partial liquidity
+      Γ£ö should update reserves after removing liquidity
+    Pair ΓÇô Swap
+      Γ£ö should perform a swap (token0 ΓåÆ token1)
+      Γ£ö should perform a swap (token1 ΓåÆ token0)
+      Γ£ö should emit Swap and Sync events
+      Γ£ö should revert when both output amounts are zero
+      Γ£ö should revert when output exceeds reserves
+      Γ£ö should revert when swapping to token0 address
+      Γ£ö should revert when swapping to token1 address
+      Γ£ö should revert when no input tokens sent (INSUFFICIENT_INPUT_AMOUNT)
+      Γ£ö should charge 0.3% fee
+    Pair ΓÇô getAmountOut edge cases
+      Γ£ö should revert when amountIn is zero
+      Γ£ö should revert when reserveIn is zero
+      Γ£ö should revert when reserveOut is zero
+      Γ£ö should revert when both reserves are zero
+      Γ£ö should return a correct amount for small input
+      Γ£ö should return diminishing output for large input relative to reserves
+    Pair ΓÇô Cumulative Prices
+      Γ£ö should update cumulative prices after time passes and reserves change
+
+  DEXRouter
+    Deployment
+      Γ£ö should set the factory address
+    Add Liquidity
+      Γ£ö should add initial liquidity via router
+      Γ£ö should emit LiquidityAdded event
+      Γ£ö should add proportional liquidity to existing pool
+      Γ£ö should adjust amounts when adding with excess tokenB
+      Γ£ö should revert if pair does not exist
+      Γ£ö should revert if deadline expired
+      Γ£ö should revert if amountBMin not met
+      Γ£ö should add liquidity via amountAOptimal path (excess tokenA)
+      Γ£ö should revert with INSUFFICIENT_A_AMOUNT on amountAOptimal path
+    Remove Liquidity
+      Γ£ö should remove liquidity via router
+      Γ£ö should emit LiquidityRemoved event
+      Γ£ö should remove all liquidity
+      Γ£ö should revert if deadline expired
+      Γ£ö should revert if pair does not exist
+      Γ£ö should revert if amountAMin not met
+      Γ£ö should revert if amountBMin not met
+    Swap ΓÇô swapExactTokensForTokens
+      Γ£ö should swap USDC ΓåÆ Token
+      Γ£ö should swap Token ΓåÆ USDC
+      Γ£ö should emit Swap event
+      Γ£ö should revert if deadline expired
+      Γ£ö should revert if path is invalid (length < 2)
+      Γ£ö should revert if amountOutMin not met (max slippage)
+      Γ£ö should handle successive swaps correctly
+    getAmountsOut
+      Γ£ö should return correct amounts array length
+      Γ£ö should revert with invalid path (length < 2)
+    End-to-End Flow
+      Γ£ö should add liquidity ΓåÆ swap ΓåÆ remove liquidity
+      Γ£ö should let LP earn trading fees from swaps
+    Multi-hop Swap
+      Γ£ö should perform multi-hop swap USDC ΓåÆ Token ΓåÆ Token2
+      Γ£ö should return correct amounts for multi-hop getAmountsOut
+
+  MockToken
+    Deployment
+      Γ£ö should set correct name and symbol
+      Γ£ö should have 18 decimals
+      Γ£ö should mint initial supply to owner
+      Γ£ö should set the correct owner
+    Minting
+      Γ£ö should allow owner to mint tokens
+      Γ£ö should revert when non-owner tries to mint
+    Faucet
+      Γ£ö should allow anyone to use faucet
+      Γ£ö should allow faucet to be called multiple times
+      Γ£ö should allow faucet to mint to another address
+    Transfers
+      Γ£ö should transfer tokens correctly
+      Γ£ö should update both balances on transfer
+
+  MockUSDC
+    Deployment
+      Γ£ö should set correct name and symbol
+      Γ£ö should have 6 decimals
+      Γ£ö should set the correct owner
+      Γ£ö should start with zero balance for owner
+    Minting
+      Γ£ö should allow owner to mint USDC
+      Γ£ö should revert when non-owner tries to mint
+    Faucet
+      Γ£ö should allow anyone to use faucet and get 1000 USDC
+      Γ£ö should allow faucet to mint to another address
+
+  DEXToken (Lock.sol)
+    Deployment
+      Γ£ö should have correct name and symbol
+      Γ£ö should mint initial supply to deployer
+      Γ£ö should set correct total supply
+    Transfers
+      Γ£ö should transfer correctly
+      Γ£ö should update sender balance on transfer
+      Γ£ö should revert on transfer without sufficient balance
+    Approvals
+      Γ£ö should approve and allow transferFrom
+
+
+  102 passing (6s)
+
