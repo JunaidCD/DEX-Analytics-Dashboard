@@ -2,6 +2,7 @@
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "./DEXFactory.sol";
 import "./DEXPair.sol";
@@ -10,8 +11,10 @@ import "./DEXPair.sol";
 /// @notice Router contract for interacting with DEX pairs
 /// @dev Handles liquidity provision and token swaps
 contract DEXRouter is ReentrancyGuard {
+    using SafeERC20 for IERC20;
+
     /// @notice Factory contract address
-    address public factory;
+    address public immutable factory;
 
     /// @notice Emitted when liquidity is added to a pair
     /// @param pair Address of the pair
@@ -40,19 +43,8 @@ contract DEXRouter is ReentrancyGuard {
     /// @notice Initializes the router with a factory address
     /// @param _factory Address of the DEXFactory contract
     constructor(address _factory) {
+        require(_factory != address(0), "DEXRouter: ZERO_ADDRESS");
         factory = _factory;
-    }
-
-    /// @notice Sorts two token addresses by numerical value
-    /// @dev Used to ensure consistent token ordering across pairs
-    /// @param tokenA First token address
-    /// @param tokenB Second token address
-    /// @return token0 Lower address token
-    /// @return token1 Higher address token
-    function sortTokens(address tokenA, address tokenB) internal pure returns (address token0, address token1) {
-        require(tokenA != tokenB, "DEXRouter: IDENTICAL_ADDRESSES");
-        (token0, token1) = tokenA < tokenB ? (tokenA, tokenB) : (tokenB, tokenA);
-        require(token0 != address(0), "DEXRouter: ZERO_ADDRESS");
     }
 
     /// @notice Calculates optimal token amount for adding liquidity
@@ -153,8 +145,8 @@ contract DEXRouter is ReentrancyGuard {
         }
 
         // Transfer tokens to pair
-        IERC20(tokenA).transferFrom(msg.sender, pair, amountA);
-        IERC20(tokenB).transferFrom(msg.sender, pair, amountB);
+        IERC20(tokenA).safeTransferFrom(msg.sender, pair, amountA);
+        IERC20(tokenB).safeTransferFrom(msg.sender, pair, amountB);
 
         // Mint liquidity tokens
         liquidity = DEXPair(pair).mint(to);
@@ -187,7 +179,7 @@ contract DEXRouter is ReentrancyGuard {
         require(pair != address(0), "DEXRouter: PAIR_NOT_EXISTS");
 
         // Transfer liquidity to pair
-        IERC20(pair).transferFrom(msg.sender, pair, liquidity);
+        IERC20(pair).safeTransferFrom(msg.sender, pair, liquidity);
         
         // Burn and get amounts
         (uint256 amount0, uint256 amount1) = DEXPair(pair).burn(to);
@@ -239,7 +231,7 @@ contract DEXRouter is ReentrancyGuard {
         require(amounts[amounts.length - 1] >= amountOutMin, "DEXRouter: INSUFFICIENT_OUTPUT_AMOUNT");
 
         // Transfer input tokens from user to pair
-        IERC20(path[0]).transferFrom(msg.sender, DEXFactory(factory).getPair(path[0], path[1]), amounts[0]);
+        IERC20(path[0]).safeTransferFrom(msg.sender, DEXFactory(factory).getPair(path[0], path[1]), amounts[0]);
 
         // Do the swap - router swaps on behalf of user
         // The pair will calculate actual amountIn from balance - reserve

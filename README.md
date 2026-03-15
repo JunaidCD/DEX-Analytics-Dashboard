@@ -133,6 +133,14 @@ npx hardhat coverage
 - **DEXFactory**: Ensured identical or zero-address token pairs cannot be created and prevented redundant pair pool re-creation.
 - **Coverage**: Achieved achieving over **95%** overall smart contract line coverage (`solidity-coverage`).
 
+### Security Audit & Optimization
+
+We use `slither-analyzer` to perform static code analysis and identify potential vulnerabilities. The following security and gas optimizations have been applied:
+- **SafeERC20 Migration**: Replaced standard `transfer`/`transferFrom` calls with OpenZeppelin's `SafeERC20` wrapper in `DEXRouter` to strictly fully revert on token transfer failures (unhandled `false` returns).
+- **Access & Zero-Address Checks**: Enforced `require(address != address(0))` validations upon contract deployment and initialization to prevent locking funds or misconfiguring factory routing.
+- **Gas Optimization**: Marked static storage variables (e.g., `factory`, `_decimals`) as `immutable` to heavily optimize read costs.
+- **NatSpec Documentation**: Fully compliant Ethereum Natural Specification Format (`@notice`, `@dev`, `@param`, `@return`) implemented natively across all mock tokens and core infrastructure contracts.
+
 ## Frontend
 
 ### Start Development Server

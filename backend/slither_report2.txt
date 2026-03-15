@@ -1,0 +1,329 @@
+'npx hardhat clean' running (wd: C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend)
+'npx hardhat clean --global' running (wd: C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend)
+'npx hardhat compile --force' running (wd: C:\Users\ASUS\OneDrive\Desktop\DEX-Analytics-Dashboard\backend)
+INFO:Detectors:
+Detector: weak-prng
+DEXPair._update(uint256,uint256,uint112,uint112) (contracts/DEXPair.sol#130-142) uses a weak PRNG: "blockTimestamp = uint32(block.timestamp % 2 ** 32) (contracts/DEXPair.sol#132)" 
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#weak-PRNG
+INFO:Detectors:
+Detector: incorrect-equality
+DEXPair._safeTransfer(address,address,uint256) (contracts/DEXPair.sol#120-123) uses a dangerous strict equality:
+	- require(bool,string)(success && (data.length == 0 || abi.decode(data,(bool))),DEX: TRANSFER_FAILED) (contracts/DEXPair.sol#122)
+DEXPair.mint(address) (contracts/DEXPair.sol#148-166) uses a dangerous strict equality:
+	- _totalSupply == 0 (contracts/DEXPair.sol#156)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#dangerous-strict-equalities
+INFO:Detectors:
+Detector: reentrancy-no-eth
+Reentrancy in DEXPair.burn(address) (contracts/DEXPair.sol#172-189):
+	External calls:
+	- _safeTransfer(token0,to,amount0) (contracts/DEXPair.sol#182)
+		- (success,data) = token.call(abi.encodeWithSelector(SELECTOR,to,value)) (contracts/DEXPair.sol#121)
+	- _safeTransfer(token1,to,amount1) (contracts/DEXPair.sol#183)
+		- (success,data) = token.call(abi.encodeWithSelector(SELECTOR,to,value)) (contracts/DEXPair.sol#121)
+	State variables written after the call(s):
+	- _update(balance0,balance1,_reserve0,_reserve1) (contracts/DEXPair.sol#187)
+		- blockTimestampLast = blockTimestamp (contracts/DEXPair.sol#140)
+	DEXPair.blockTimestampLast (contracts/DEXPair.sol#37) can be used in cross function reentrancies:
+	- DEXPair.getReserves() (contracts/DEXPair.sol#110-114)
+	- _update(balance0,balance1,_reserve0,_reserve1) (contracts/DEXPair.sol#187)
+		- reserve0 = uint112(balance0) (contracts/DEXPair.sol#138)
+	DEXPair.reserve0 (contracts/DEXPair.sol#31) can be used in cross function reentrancies:
+	- DEXPair.getReserves() (contracts/DEXPair.sol#110-114)
+	- _update(balance0,balance1,_reserve0,_reserve1) (contracts/DEXPair.sol#187)
+		- reserve1 = uint112(balance1) (contracts/DEXPair.sol#139)
+	DEXPair.reserve1 (contracts/DEXPair.sol#34) can be used in cross function reentrancies:
+	- DEXPair.getReserves() (contracts/DEXPair.sol#110-114)
+Reentrancy in DEXFactory.createPair(address,address) (contracts/DEXFactory.sol#34-53):
+	External calls:
+	- DEXPair(pair).initialize(token0,token1) (contracts/DEXFactory.sol#47)
+	State variables written after the call(s):
+	- getPair[token0][token1] = pair (contracts/DEXFactory.sol#48)
+	DEXFactory.getPair (contracts/DEXFactory.sol#20) can be used in cross function reentrancies:
+	- DEXFactory.createPair(address,address) (contracts/DEXFactory.sol#34-53)
+	- DEXFactory.getPair (contracts/DEXFactory.sol#20)
+	- getPair[token1][token0] = pair (contracts/DEXFactory.sol#49)
+	DEXFactory.getPair (contracts/DEXFactory.sol#20) can be used in cross function reentrancies:
+	- DEXFactory.createPair(address,address) (contracts/DEXFactory.sol#34-53)
+	- DEXFactory.getPair (contracts/DEXFactory.sol#20)
+Reentrancy in DEXPair.swap(uint256,uint256,address,bytes) (contracts/DEXPair.sol#197-227):
+	External calls:
+	- _safeTransfer(token0,to,amount0Out) (contracts/DEXPair.sol#208)
+		- (success,data) = token.call(abi.encodeWithSelector(SELECTOR,to,value)) (contracts/DEXPair.sol#121)
+	- _safeTransfer(token1,to,amount1Out) (contracts/DEXPair.sol#209)
+		- (success,data) = token.call(abi.encodeWithSelector(SELECTOR,to,value)) (contracts/DEXPair.sol#121)
+	State variables written after the call(s):
+	- _update(balance0,balance1,_reserve0,_reserve1) (contracts/DEXPair.sol#225)
+		- blockTimestampLast = blockTimestamp (contracts/DEXPair.sol#140)
+	DEXPair.blockTimestampLast (contracts/DEXPair.sol#37) can be used in cross function reentrancies:
+	- DEXPair.getReserves() (contracts/DEXPair.sol#110-114)
+	- _update(balance0,balance1,_reserve0,_reserve1) (contracts/DEXPair.sol#225)
+		- reserve0 = uint112(balance0) (contracts/DEXPair.sol#138)
+	DEXPair.reserve0 (contracts/DEXPair.sol#31) can be used in cross function reentrancies:
+	- DEXPair.getReserves() (contracts/DEXPair.sol#110-114)
+	- _update(balance0,balance1,_reserve0,_reserve1) (contracts/DEXPair.sol#225)
+		- reserve1 = uint112(balance1) (contracts/DEXPair.sol#139)
+	DEXPair.reserve1 (contracts/DEXPair.sol#34) can be used in cross function reentrancies:
+	- DEXPair.getReserves() (contracts/DEXPair.sol#110-114)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#reentrancy-vulnerabilities-2
+INFO:Detectors:
+Detector: unused-return
+DEXRouter._getAmountsOut(uint256,address[]) (contracts/DEXRouter.sol#81-97) ignores return value by (reserve0,reserve1,None) = DEXPair(pair).getReserves() (contracts/DEXRouter.sol#88)
+DEXRouter.addLiquidity(address,address,uint256,uint256,uint256,uint256,address,uint256) (contracts/DEXRouter.sol#112-155) ignores return value by (reserveA,reserveB,None) = DEXPair(pair).getReserves() (contracts/DEXRouter.sol#127)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#unused-return
+INFO:Detectors:
+Detector: shadowing-local
+DEXPair.mint(address)._totalSupply (contracts/DEXPair.sol#155) shadows:
+	- ERC20._totalSupply (node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol#34) (state variable)
+DEXPair.burn(address)._totalSupply (contracts/DEXPair.sol#175) shadows:
+	- ERC20._totalSupply (node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol#34) (state variable)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#local-variable-shadowing
+INFO:Detectors:
+Detector: calls-loop
+DEXRouter._getAmountsOut(uint256,address[]) (contracts/DEXRouter.sol#81-97) has external calls inside a loop: pair = DEXFactory(factory).getPair(path[i],path[i + 1]) (contracts/DEXRouter.sol#87)
+	Calls stack containing the loop:
+		DEXRouter.swapExactTokensForTokens(uint256,uint256,address[],address,uint256)
+DEXRouter._getAmountsOut(uint256,address[]) (contracts/DEXRouter.sol#81-97) has external calls inside a loop: (reserve0,reserve1,None) = DEXPair(pair).getReserves() (contracts/DEXRouter.sol#88)
+	Calls stack containing the loop:
+		DEXRouter.swapExactTokensForTokens(uint256,uint256,address[],address,uint256)
+DEXRouter._getAmountsOut(uint256,address[]) (contracts/DEXRouter.sol#81-97) has external calls inside a loop: token0 = DEXPair(pair).token0() (contracts/DEXRouter.sol#91)
+	Calls stack containing the loop:
+		DEXRouter.swapExactTokensForTokens(uint256,uint256,address[],address,uint256)
+DEXRouter._swap(uint256[],address[],address) (contracts/DEXRouter.sol#247-268) has external calls inside a loop: pair = DEXFactory(factory).getPair(input,output) (contracts/DEXRouter.sol#251)
+	Calls stack containing the loop:
+		DEXRouter.swapExactTokensForTokens(uint256,uint256,address[],address,uint256)
+DEXRouter._swap(uint256[],address[],address) (contracts/DEXRouter.sol#247-268) has external calls inside a loop: token0 = DEXPair(pair).token0() (contracts/DEXRouter.sol#254)
+	Calls stack containing the loop:
+		DEXRouter.swapExactTokensForTokens(uint256,uint256,address[],address,uint256)
+DEXRouter._swap(uint256[],address[],address) (contracts/DEXRouter.sol#247-268) has external calls inside a loop: nextTo = DEXFactory(factory).getPair(path[i + 1],path[i + 2]) (contracts/DEXRouter.sol#262-264)
+	Calls stack containing the loop:
+		DEXRouter.swapExactTokensForTokens(uint256,uint256,address[],address,uint256)
+DEXRouter._swap(uint256[],address[],address) (contracts/DEXRouter.sol#247-268) has external calls inside a loop: DEXPair(pair).swap(amount0Out,amount1Out,nextTo,) (contracts/DEXRouter.sol#266)
+	Calls stack containing the loop:
+		DEXRouter.swapExactTokensForTokens(uint256,uint256,address[],address,uint256)
+DEXRouter._getAmountsOut(uint256,address[]) (contracts/DEXRouter.sol#81-97) has external calls inside a loop: pair = DEXFactory(factory).getPair(path[i],path[i + 1]) (contracts/DEXRouter.sol#87)
+	Calls stack containing the loop:
+		DEXRouter.getAmountsOut(uint256,address[])
+DEXRouter._getAmountsOut(uint256,address[]) (contracts/DEXRouter.sol#81-97) has external calls inside a loop: (reserve0,reserve1,None) = DEXPair(pair).getReserves() (contracts/DEXRouter.sol#88)
+	Calls stack containing the loop:
+		DEXRouter.getAmountsOut(uint256,address[])
+DEXRouter._getAmountsOut(uint256,address[]) (contracts/DEXRouter.sol#81-97) has external calls inside a loop: token0 = DEXPair(pair).token0() (contracts/DEXRouter.sol#91)
+	Calls stack containing the loop:
+		DEXRouter.getAmountsOut(uint256,address[])
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation/#calls-inside-a-loop
+INFO:Detectors:
+Detector: reentrancy-benign
+Reentrancy in DEXPair.burn(address) (contracts/DEXPair.sol#172-189):
+	External calls:
+	- _safeTransfer(token0,to,amount0) (contracts/DEXPair.sol#182)
+		- (success,data) = token.call(abi.encodeWithSelector(SELECTOR,to,value)) (contracts/DEXPair.sol#121)
+	- _safeTransfer(token1,to,amount1) (contracts/DEXPair.sol#183)
+		- (success,data) = token.call(abi.encodeWithSelector(SELECTOR,to,value)) (contracts/DEXPair.sol#121)
+	State variables written after the call(s):
+	- _update(balance0,balance1,_reserve0,_reserve1) (contracts/DEXPair.sol#187)
+		- price0CumulativeLast += uint256(_reserve1) * timeElapsed (contracts/DEXPair.sol#135)
+	- _update(balance0,balance1,_reserve0,_reserve1) (contracts/DEXPair.sol#187)
+		- price1CumulativeLast += uint256(_reserve0) * timeElapsed (contracts/DEXPair.sol#136)
+Reentrancy in DEXFactory.createPair(address,address) (contracts/DEXFactory.sol#34-53):
+	External calls:
+	- DEXPair(pair).initialize(token0,token1) (contracts/DEXFactory.sol#47)
+	State variables written after the call(s):
+	- allPairs.push(pair) (contracts/DEXFactory.sol#50)
+Reentrancy in DEXPair.swap(uint256,uint256,address,bytes) (contracts/DEXPair.sol#197-227):
+	External calls:
+	- _safeTransfer(token0,to,amount0Out) (contracts/DEXPair.sol#208)
+		- (success,data) = token.call(abi.encodeWithSelector(SELECTOR,to,value)) (contracts/DEXPair.sol#121)
+	- _safeTransfer(token1,to,amount1Out) (contracts/DEXPair.sol#209)
+		- (success,data) = token.call(abi.encodeWithSelector(SELECTOR,to,value)) (contracts/DEXPair.sol#121)
+	State variables written after the call(s):
+	- _update(balance0,balance1,_reserve0,_reserve1) (contracts/DEXPair.sol#225)
+		- price0CumulativeLast += uint256(_reserve1) * timeElapsed (contracts/DEXPair.sol#135)
+	- _update(balance0,balance1,_reserve0,_reserve1) (contracts/DEXPair.sol#225)
+		- price1CumulativeLast += uint256(_reserve0) * timeElapsed (contracts/DEXPair.sol#136)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#reentrancy-vulnerabilities-3
+INFO:Detectors:
+Detector: reentrancy-events
+Reentrancy in DEXFactory.createPair(address,address) (contracts/DEXFactory.sol#34-53):
+	External calls:
+	- DEXPair(pair).initialize(token0,token1) (contracts/DEXFactory.sol#47)
+	Event emitted after the call(s):
+	- PairCreated(token0,token1,pair,allPairs.length) (contracts/DEXFactory.sol#52)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#reentrancy-vulnerabilities-4
+INFO:Detectors:
+Detector: timestamp
+DEXPair._safeTransfer(address,address,uint256) (contracts/DEXPair.sol#120-123) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(success && (data.length == 0 || abi.decode(data,(bool))),DEX: TRANSFER_FAILED) (contracts/DEXPair.sol#122)
+DEXPair._update(uint256,uint256,uint112,uint112) (contracts/DEXPair.sol#130-142) uses timestamp for comparisons
+	Dangerous comparisons:
+	- timeElapsed > 0 && _reserve0 != 0 && _reserve1 != 0 (contracts/DEXPair.sol#134)
+DEXPair.mint(address) (contracts/DEXPair.sol#148-166) uses timestamp for comparisons
+	Dangerous comparisons:
+	- _totalSupply == 0 (contracts/DEXPair.sol#156)
+	- require(bool,string)(liquidity > 0,DEX: INSUFFICIENT_LIQUIDITY_MINTED) (contracts/DEXPair.sol#162)
+DEXPair.burn(address) (contracts/DEXPair.sol#172-189) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(amount0 > 0 && amount1 > 0,DEX: INSUFFICIENT_LIQUIDITY_BURNED) (contracts/DEXPair.sol#179)
+DEXPair.swap(uint256,uint256,address,bytes) (contracts/DEXPair.sol#197-227) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(amount0Out < _reserve0 && amount1Out < _reserve1,DEX: INSUFFICIENT_LIQUIDITY) (contracts/DEXPair.sol#200)
+	- require(bool,string)(amount0In > 0 || amount1In > 0,DEX: INSUFFICIENT_INPUT_AMOUNT) (contracts/DEXPair.sol#214)
+	- require(bool,string)(balance0Adjusted * balance1Adjusted >= uint256(_reserve0) * uint256(_reserve1) * 1000000,DEX: K) (contracts/DEXPair.sol#221)
+	- balance0 > _reserve0 - amount0Out (contracts/DEXPair.sol#212)
+	- balance1 > _reserve1 - amount1Out (contracts/DEXPair.sol#213)
+DEXPair.sqrt(uint256) (contracts/DEXPair.sol#247-254) uses timestamp for comparisons
+	Dangerous comparisons:
+	- z < y (contracts/DEXPair.sol#250)
+DEXPair.min(uint256,uint256) (contracts/DEXPair.sol#260-262) uses timestamp for comparisons
+	Dangerous comparisons:
+	- x < y (contracts/DEXPair.sol#261)
+DEXRouter.addLiquidity(address,address,uint256,uint256,uint256,uint256,address,uint256) (contracts/DEXRouter.sol#112-155) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(deadline >= block.timestamp,DEXRouter: EXPIRED) (contracts/DEXRouter.sol#122)
+DEXRouter.removeLiquidity(address,address,uint256,uint256,uint256,address,uint256) (contracts/DEXRouter.sol#167-210) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(deadline >= block.timestamp,DEXRouter: EXPIRED) (contracts/DEXRouter.sol#176)
+DEXRouter.swapExactTokensForTokens(uint256,uint256,address[],address,uint256) (contracts/DEXRouter.sol#220-241) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(deadline >= block.timestamp,DEXRouter: EXPIRED) (contracts/DEXRouter.sol#227)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#block-timestamp
+INFO:Detectors:
+Detector: assembly
+SafeERC20._safeTransfer(IERC20,address,uint256,bool) (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#176-200) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#179-199)
+SafeERC20._safeTransferFrom(IERC20,address,address,uint256,bool) (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#212-244) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#221-243)
+SafeERC20._safeApprove(IERC20,address,uint256,bool) (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#255-279) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#258-278)
+StorageSlot.getAddressSlot(bytes32) (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#66-70) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#67-69)
+StorageSlot.getBooleanSlot(bytes32) (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#75-79) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#76-78)
+StorageSlot.getBytes32Slot(bytes32) (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#84-88) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#85-87)
+StorageSlot.getUint256Slot(bytes32) (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#93-97) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#94-96)
+StorageSlot.getInt256Slot(bytes32) (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#102-106) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#103-105)
+StorageSlot.getStringSlot(bytes32) (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#111-115) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#112-114)
+StorageSlot.getStringSlot(string) (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#120-124) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#121-123)
+StorageSlot.getBytesSlot(bytes32) (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#129-133) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#130-132)
+StorageSlot.getBytesSlot(bytes) (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#138-142) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#139-141)
+DEXFactory.createPair(address,address) (contracts/DEXFactory.sol#34-53) uses assembly
+	- INLINE ASM (contracts/DEXFactory.sol#43-45)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#assembly-usage
+INFO:Detectors:
+Detector: pragma
+5 different versions of Solidity are used:
+	- Version constraint ^0.8.20 is used by:
+		-^0.8.20 (node_modules/@openzeppelin/contracts/access/Ownable.sol#4)
+		-^0.8.20 (node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol#4)
+		-^0.8.20 (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#4)
+		-^0.8.20 (node_modules/@openzeppelin/contracts/utils/Context.sol#4)
+		-^0.8.20 (node_modules/@openzeppelin/contracts/utils/ReentrancyGuard.sol#4)
+		-^0.8.20 (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#5)
+	- Version constraint >=0.6.2 is used by:
+		->=0.6.2 (node_modules/@openzeppelin/contracts/interfaces/IERC1363.sol#4)
+		->=0.6.2 (node_modules/@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol#4)
+	- Version constraint >=0.4.16 is used by:
+		->=0.4.16 (node_modules/@openzeppelin/contracts/interfaces/IERC165.sol#4)
+		->=0.4.16 (node_modules/@openzeppelin/contracts/interfaces/IERC20.sol#4)
+		->=0.4.16 (node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol#4)
+		->=0.4.16 (node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol#4)
+	- Version constraint >=0.8.4 is used by:
+		->=0.8.4 (node_modules/@openzeppelin/contracts/interfaces/draft-IERC6093.sol#4)
+	- Version constraint ^0.8.24 is used by:
+		-^0.8.24 (contracts/DEXFactory.sol#2)
+		-^0.8.24 (contracts/DEXPair.sol#2)
+		-^0.8.24 (contracts/DEXRouter.sol#2)
+		-^0.8.24 (contracts/Lock.sol#2)
+		-^0.8.24 (contracts/MockToken.sol#2)
+		-^0.8.24 (contracts/MockUSDC.sol#2)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#different-pragma-directives-are-used
+INFO:Detectors:
+Detector: solc-version
+Version constraint ^0.8.20 contains known severe issues (https://solidity.readthedocs.io/en/latest/bugs.html)
+	- VerbatimInvalidDeduplication
+	- FullInlinerNonExpressionSplitArgumentEvaluationOrder
+	- MissingSideEffectsOnSelectorAccess.
+It is used by:
+	- ^0.8.20 (node_modules/@openzeppelin/contracts/access/Ownable.sol#4)
+	- ^0.8.20 (node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol#4)
+	- ^0.8.20 (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#4)
+	- ^0.8.20 (node_modules/@openzeppelin/contracts/utils/Context.sol#4)
+	- ^0.8.20 (node_modules/@openzeppelin/contracts/utils/ReentrancyGuard.sol#4)
+	- ^0.8.20 (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#5)
+Version constraint >=0.6.2 contains known severe issues (https://solidity.readthedocs.io/en/latest/bugs.html)
+	- MissingSideEffectsOnSelectorAccess
+	- AbiReencodingHeadOverflowWithStaticArrayCleanup
+	- DirtyBytesArrayToStorage
+	- NestedCalldataArrayAbiReencodingSizeValidation
+	- ABIDecodeTwoDimensionalArrayMemory
+	- KeccakCaching
+	- EmptyByteArrayCopy
+	- DynamicArrayCleanup
+	- MissingEscapingInFormatting
+	- ArraySliceDynamicallyEncodedBaseType
+	- ImplicitConstructorCallvalueCheck
+	- TupleAssignmentMultiStackSlotComponents
+	- MemoryArrayCreationOverflow.
+It is used by:
+	- >=0.6.2 (node_modules/@openzeppelin/contracts/interfaces/IERC1363.sol#4)
+	- >=0.6.2 (node_modules/@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol#4)
+Version constraint >=0.4.16 contains known severe issues (https://solidity.readthedocs.io/en/latest/bugs.html)
+	- DirtyBytesArrayToStorage
+	- ABIDecodeTwoDimensionalArrayMemory
+	- KeccakCaching
+	- EmptyByteArrayCopy
+	- DynamicArrayCleanup
+	- ImplicitConstructorCallvalueCheck
+	- TupleAssignmentMultiStackSlotComponents
+	- MemoryArrayCreationOverflow
+	- privateCanBeOverridden
+	- SignedArrayStorageCopy
+	- ABIEncoderV2StorageArrayWithMultiSlotElement
+	- DynamicConstructorArgumentsClippedABIV2
+	- UninitializedFunctionPointerInConstructor_0.4.x
+	- IncorrectEventSignatureInLibraries_0.4.x
+	- ExpExponentCleanup
+	- NestedArrayFunctionCallDecoder
+	- ZeroFunctionSelector.
+It is used by:
+	- >=0.4.16 (node_modules/@openzeppelin/contracts/interfaces/IERC165.sol#4)
+	- >=0.4.16 (node_modules/@openzeppelin/contracts/interfaces/IERC20.sol#4)
+	- >=0.4.16 (node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol#4)
+	- >=0.4.16 (node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol#4)
+Version constraint >=0.8.4 contains known severe issues (https://solidity.readthedocs.io/en/latest/bugs.html)
+	- FullInlinerNonExpressionSplitArgumentEvaluationOrder
+	- MissingSideEffectsOnSelectorAccess
+	- AbiReencodingHeadOverflowWithStaticArrayCleanup
+	- DirtyBytesArrayToStorage
+	- DataLocationChangeInInternalOverride
+	- NestedCalldataArrayAbiReencodingSizeValidation
+	- SignedImmutables.
+It is used by:
+	- >=0.8.4 (node_modules/@openzeppelin/contracts/interfaces/draft-IERC6093.sol#4)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#incorrect-versions-of-solidity
+INFO:Detectors:
+Detector: low-level-calls
+Low level call in DEXPair._safeTransfer(address,address,uint256) (contracts/DEXPair.sol#120-123):
+	- (success,data) = token.call(abi.encodeWithSelector(SELECTOR,to,value)) (contracts/DEXPair.sol#121)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#low-level-calls
+INFO:Detectors:
+Detector: naming-convention
+Parameter DEXPair.initialize(address,address)._token0 (contracts/DEXPair.sol#99) is not in mixedCase
+Parameter DEXPair.initialize(address,address)._token1 (contracts/DEXPair.sol#99) is not in mixedCase
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#conformance-to-solidity-naming-conventions
+INFO:Detectors:
+Detector: too-many-digits
+DEXFactory.createPair(address,address) (contracts/DEXFactory.sol#34-53) uses literals with too many digits:
+	- bytecode = type()(DEXPair).creationCode (contracts/DEXFactory.sol#41)
+DEXPair.swap(uint256,uint256,address,bytes) (contracts/DEXPair.sol#197-227) uses literals with too many digits:
+	- require(bool,string)(balance0Adjusted * balance1Adjusted >= uint256(_reserve0) * uint256(_reserve1) * 1000000,DEX: K) (contracts/DEXPair.sol#221)
+MockToken.constructor(address) (contracts/MockToken.sol#13-15) uses literals with too many digits:
+	- _mint(initialOwner,1000000 * 10 ** 18) (contracts/MockToken.sol#14)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#too-many-digits
+INFO:Slither:. analyzed (19 contracts with 101 detectors), 58 result(s) found

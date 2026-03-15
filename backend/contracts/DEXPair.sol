@@ -19,7 +19,7 @@ contract DEXPair is ERC20, ReentrancyGuard {
     address private constant DEAD_ADDRESS = 0x000000000000000000000000000000000000dEaD;
 
     /// @notice Factory contract address
-    address public factory;
+    address public immutable factory;
     
     /// @notice Address of the first token in the pair (by sort order)
     address public token0;
@@ -98,6 +98,7 @@ contract DEXPair is ERC20, ReentrancyGuard {
     /// @param _token1 Address of the second token
     function initialize(address _token0, address _token1) external {
         require(msg.sender == factory, 'DEX: FORBIDDEN');
+        require(_token0 != address(0) && _token1 != address(0), 'DEX: ZERO_ADDRESS');
         token0 = _token0;
         token1 = _token1;
     }
