@@ -5,13 +5,15 @@ import { useAccount, useReadContract, useWriteContract, useWaitForTransactionRec
 import { parseUnits, formatUnits, formatEther, parseEther } from 'viem';
 import { getChainContracts } from '../../config/wagmi';
 import { ERC20_ABI, ROUTER_ABI, PAIR_ABI, FACTORY_ABI } from '../../config/abis';
+import dynamic from 'next/dynamic';
+
+const MEVSimulator = dynamic(() => import('../../components/MEVSimulator'), { ssr: false });
 
 export default function SwapPage() {
   const { isConnected, address } = useAccount();
   const chainId = useChainId();
   const [mounted, setMounted] = useState(false);
-  
-  // Get contracts for current chain
+
   const CONTRACTS = useMemo(() => {
     return getChainContracts(chainId);
   }, [chainId]);
@@ -19,11 +21,11 @@ export default function SwapPage() {
    // Token list - update addresses after deployment
    const TOKENS = useMemo(() => [
      { 
-       symbol: 'USDC', 
-       name: 'USD Coin', 
+       symbol: 'aUSDC', 
+       name: 'Acala Bridgeless USDC (XCM)', 
        decimals: 6, 
        address: CONTRACTS.USDC,
-       logo: '💵'
+       logo: '💠'
      },
      { 
        symbol: 'MTK', 
@@ -441,6 +443,17 @@ export default function SwapPage() {
           </div>
         )}
       </div>
+
+      {/* Cross-chain XCM and MEV Simulator */}
+      {fromAmount && toAmount && mounted && (
+        <MEVSimulator 
+          fromToken={fromToken}
+          toToken={toToken}
+          fromAmount={fromAmount}
+          expectedOutput={toAmount}
+          priceImpact={priceImpact}
+        />
+      )}
     </div>
   );
 }
