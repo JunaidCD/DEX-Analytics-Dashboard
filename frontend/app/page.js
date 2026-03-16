@@ -45,9 +45,9 @@ export default function Home() {
           <p>Maximize your returns with automated liquidity mining rewards.</p>
         </div>
         <div className="feature-card">
-           <div className="feature-icon">🌐</div>
-           <h3>Cross-Chain Bridge</h3>
-           <p>Seamlessly bridge assets across multiple blockchain networks.</p>
+           <div className="feature-icon">📈</div>
+           <h3>Live Analytics</h3>
+           <p>Track real-time token prices, TVL, and impermanent loss through our interactive dashboard.</p>
         </div>
         <div className="feature-card">
           <div className="feature-icon">🎯</div>

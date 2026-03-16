@@ -7,6 +7,9 @@ import { CHAIN_CONTRACTS, getChainContracts } from '../../config/wagmi';
 import { ERC20_ABI, ROUTER_ABI, PAIR_ABI, FACTORY_ABI } from '../../config/abis';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import TradeHistory from '../../components/TradeHistory';
+import dynamic from 'next/dynamic';
+
+const AIPredictor = dynamic(() => import('../../components/AIPredictor'), { ssr: false });
 
 // Import utility functions
 import { formatTokenValue, formatUSD, formatNumber, formatPercentage, formatPrice, TOKEN_DECIMALS } from '../../utils/formatToken';
@@ -294,6 +297,9 @@ export default function DashboardPage() {
               </div>
             )}
           </div>
+
+          {/* AI Predictor Component */}
+          <AIPredictor priceHistory={priceHistory} />
 
           {/* Slippage Estimator */}
           <div className="analytics-section">
