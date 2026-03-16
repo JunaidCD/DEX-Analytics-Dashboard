@@ -8,9 +8,11 @@
 
 ### Key Features
 
-- **Token Swapping** — Swap between ERC-20 tokens (USDC ↔ MTK) with real-time price quoting, slippage protection, and deadline-based transaction validation via the DEXRouter contract.
+- **Token Swapping** — Swap between ERC-20 tokens (aUSDC ↔ MTK) with real-time price quoting, slippage protection, and deadline-based transaction validation via the DEXRouter contract.
+- **AI-Powered Price Predictions** — A lightweight, off-chain machine learning model (`TensorFlow.js`) processes recent swap history via viem to forecast short-term token prices using linear regression directly on the client.
+- **Cross-Chain & MEV Visibility** — Simulates advanced DeFi mechanisms, featuring a mock Acala XCM bridged stablecoin (`aUSDC`) and an interactive MEV Sandwich Attack simulator on the swap interface.
 - **Liquidity Provision** — Add and remove liquidity to trading pairs, earning fees from trades proportional to your pool share.
-- **Analytics Dashboard** — View live trade history, pool reserves, token prices, Total Value Locked (TVL), and impermanent loss calculations through an interactive data dashboard powered by charts and on-chain event indexing.
+- **Analytics Dashboard** — View live trade history, pool reserves, token prices, TVL, and impermanent loss calculations through an interactive data dashboard powered by charts and on-chain event indexing.
 - **Wallet Integration** — Connect via MetaMask (or any injected wallet) with automatic chain detection and network switching for Polkadot Hub Testnet.
 - **Responsive & Animated UI** — A premium, dark-themed interface with smooth micro-animations and glassmorphism design elements.
 
@@ -35,6 +37,7 @@ DEXplorer follows a **monorepo** structure with two main modules:
 | **React** | 19.2.3 | UI component library with the latest React Compiler optimizations |
 | **wagmi** | 3.5.0 | React hooks for Ethereum — wallet connection, contract reads/writes, chain management |
 | **viem** | 2.47.0 | Low-level TypeScript interface for EVM interaction (ABI encoding, RPC calls, event parsing) |
+| **TensorFlow.js** | 4.22.0 | Off-chain client-side machine learning library generating real-time AI price predictions |
 | **Recharts** | 3.7.0 | Composable charting library for rendering trade history, TVL, and price analytics |
 | **Framer Motion** | 12.36.0 | Animation library for smooth page transitions and micro-interactions |
 | **TanStack React Query** | 5.90.21 | Asynchronous state management for caching and refetching on-chain data |
@@ -79,7 +82,7 @@ The frontend includes dedicated utility modules for on-chain data processing:
 ## Deployed Contracts (Polkadot Hub Testnet)
 
 ### Token Addresses
-- **USDC:** `0xc118ce9D103862a3eb89386EC925e584A3FA63bA`
+- **aUSDC (Acala XCM Bridged):** `0xc118ce9D103862a3eb89386EC925e584A3FA63bA`
 - **MTK:** `0x55CFF287c2317F1bb66011ac00D4A25aEb567962`
 
 ### DEX Contracts
