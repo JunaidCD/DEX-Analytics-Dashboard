@@ -3,7 +3,9 @@
 This document outlines the high-level architecture of the DEXplorer Decentralized Exchange (DEX) Analytics Dashboard.
 
 ## System Architecture Diagram
-![Architecture Diagram](./architecture.png)
+
+![Architecture Diagram](./assets/architecture.png)
+
 ## Core Components
 
 ### 1. Frontend Layer
