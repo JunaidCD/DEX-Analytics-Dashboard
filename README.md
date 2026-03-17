@@ -1,5 +1,7 @@
 # DEXplorer
 
+**Live Demo:** https://frontend-lilac-five-89.vercel.app/
+
 > A full-stack decentralized exchange (DEX) analytics dashboard built on Polkadot Hub Testnet, featuring real-time token swaps, liquidity management, and on-chain trade analytics.
 
 ## Project Description
