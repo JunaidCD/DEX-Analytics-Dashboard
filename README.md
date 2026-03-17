@@ -82,17 +82,25 @@ The frontend includes dedicated utility modules for on-chain data processing:
 ## Deployed Contracts (Polkadot Hub Testnet)
 
 ### Token Addresses
-- **aUSDC (Acala XCM Bridged):** `0xc118ce9D103862a3eb89386EC925e584A3FA63bA`
-- **MTK:** `0x55CFF287c2317F1bb66011ac00D4A25aEb567962`
+- **MockUSDC:** `0xb16961118548B26a697D7a6570706FFeFFf471B2`
+  - [View on Block Explorer](https://polkadot-hub-testnet.subscan.io/account/0xb16961118548B26a697D7a6570706FFeFFf471B2)
+- **MockToken (MTK):** `0xddA652528ce73783b3D2084793813c97eD324c4C`
+  - [View on Block Explorer](https://polkadot-hub-testnet.subscan.io/account/0xddA652528ce73783b3D2084793813c97eD324c4C)
 
 ### DEX Contracts
-- **DEXFactory:** `0x6aE1db2478C8eeE1B2F6B6D4AEea6EC5554099cF`
-- **DEXRouter:** `0x15Ea12D7c9d2BB84770403FCd371657aE7F1A8a2`
-- **Pair (USDC/MTK):** `0x3d7F379B743a8c18A4Be4edC92F80b8D5C8fF9fB`
+- **DEXFactory:** `0xD90Fe2EF9c2e356257b632893bf9cae6275a4a3c`
+  - [View on Block Explorer](https://polkadot-hub-testnet.subscan.io/account/0xD90Fe2EF9c2e356257b632893bf9cae6275a4a3c)
+- **DEXPair (USDC/MTK):** `0x10975d291B7d6b204edc2bcD3EEc25c7d67D6F60`
+  - [View on Block Explorer](https://polkadot-hub-testnet.subscan.io/account/0x10975d291B7d6b204edc2bcD3EEc25c7d67D6F60)
 
 ### User Wallet
 - **Address:** `0x6e149A3e52125e40535EbD22be90D8E699D46C5E`
-- **Balances:** 1000 USDC, 1000 MTK
+  - [View on Block Explorer](https://polkadot-hub-testnet.subscan.io/account/0x6e149A3e52125e40535EbD22be90D8E699D46C5E)
+- **Balances:** 10000 USDC, 10000 MTK (initial liquidity added)
+
+### Block Explorer
+- **Polkadot Hub Testnet Explorer:** https://polkadot-hub-testnet.subscan.io/
+- **Search by:** Contract addresses, transaction hashes, or wallet addresses
 
 ## Getting Testnet DOT
 
