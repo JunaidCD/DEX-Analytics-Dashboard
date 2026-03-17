@@ -102,19 +102,71 @@ The frontend includes dedicated utility modules for on-chain data processing:
 - **Polkadot Hub Testnet Explorer:** https://polkadot-hub-testnet.subscan.io/
 - **Search by:** Contract addresses, transaction hashes, or wallet addresses
 
-## Getting Testnet DOT
+## How to Run Instructions
 
-To perform transactions on Polkadot Hub Testnet, you need testnet DOT tokens:
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn
+- MetaMask wallet extension
 
-1. **Polkadot Faucet:** Visit https://faucet.polkadot.io/ and follow instructions
-2. **Discord:** Join the Polkadot Discord and use the #testnet-faucet channel
-3. **Polkadot Hub Portal:** https://polkadot.js.org/apps/
+### 1. Backend Setup
+```bash
+cd backend
+npm install
+npx hardhat compile
+```
 
-Make sure to switch MetaMask to:
+### 2. Frontend Setup
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+### 3. Start the Application
+- Frontend runs on: http://localhost:3000
+- Backend contracts are deployed on Polkadot Hub Testnet
+
+### 4. Connect Wallet
+1. Click "Connect Wallet" in the header
+2. Approve MetaMask connection
+3. Ensure you're on Polkadot Hub Testnet
+
+---
+
+## Polkadot Setup on MetaMask
+
+### Add Polkadot Hub Testnet to MetaMask
+
+**Method 1: Automatic Addition**
+1. Visit https://chainlist.org/
+2. Search for "Polkadot Hub Testnet"
+3. Click "Add to Metamask"
+
+**Method 2: Manual Addition**
+1. Open MetaMask
+2. Click on network dropdown → "Add Network"
+3. Fill in the details:
+   - **Network Name:** Polkadot Hub Testnet
+   - **New RPC URL:** https://eth-rpc-testnet.polkadot.io
+   - **Chain ID:** 420420417
+   - **Currency Symbol:** DOT
+   - **Block Explorer URL:** https://polkadot-hub-testnet.subscan.io/
+
+### Get Testnet DOT Tokens
+
+**Main Faucet:** https://faucet.polkadot.io/
+
+**Alternative Methods:**
+1. **Discord:** Join the Polkadot Discord and use the #testnet-faucet channel
+2. **Polkadot Hub Portal:** https://polkadot.js.org/apps/
+
+### MetaMask Configuration Summary
 - **Network Name:** Polkadot Hub Testnet
 - **RPC URL:** https://eth-rpc-testnet.polkadot.io
 - **Chain ID:** 420420417
 - **Symbol:** DOT
+- **Block Explorer:** https://polkadot-hub-testnet.subscan.io/
 
 ## Local Development (Hardhat)
 
