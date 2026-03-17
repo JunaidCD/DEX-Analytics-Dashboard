@@ -16,6 +16,19 @@
 - **Wallet Integration** — Connect via MetaMask (or any injected wallet) with automatic chain detection and network switching for Polkadot Hub Testnet.
 - **Responsive & Animated UI** — A premium, dark-themed interface with smooth micro-animations and glassmorphism design elements.
 
+## Interface Screenshots
+
+### Token Swap Interface
+![Swap Interface](./assets/swap.png)
+*Intuitive token swapping interface with real-time price quotes and slippage protection*
+
+### Analytics Dashboard
+![Analytics Dashboard 1](./assets/dashboard1.png)
+*Comprehensive analytics dashboard showing trading volumes, liquidity pools, and price charts*
+
+![Analytics Dashboard 2](./assets/dashboard2.png)
+*Detailed view of portfolio performance, impermanent loss calculations, and trading history*
+
 ---
 
 ## Technical Description
@@ -102,35 +115,29 @@ The frontend includes dedicated utility modules for on-chain data processing:
 - **Polkadot Hub Testnet Explorer:** https://polkadot-hub-testnet.subscan.io/
 - **Search by:** Contract addresses, transaction hashes, or wallet addresses
 
-## How to Run Instructions
+## Quick Start
 
-### Prerequisites
-- Node.js (v16 or higher)
-- npm or yarn
-- MetaMask wallet extension
-
-### 1. Backend Setup
+### 1. Clone & Install
 ```bash
+git clone https://github.com/JunaidCD/DEX-Analytics-Dashboard.git
+cd DEX-Analytics-Dashboard
+
+# Backend
 cd backend
 npm install
 npx hardhat compile
+
+# Frontend  
+cd ../frontend
+npm install
 ```
 
-### 2. Frontend Setup
+### 2. Start Application
 ```bash
-cd frontend
-npm install
+# Start frontend (from frontend directory)
 npm run dev
 ```
-
-### 3. Start the Application
-- Frontend runs on: http://localhost:3000
-- Backend contracts are deployed on Polkadot Hub Testnet
-
-### 4. Connect Wallet
-1. Click "Connect Wallet" in the header
-2. Approve MetaMask connection
-3. Ensure you're on Polkadot Hub Testnet
+Open http://localhost:3000
 
 ---
 
